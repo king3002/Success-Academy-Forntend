@@ -125,20 +125,33 @@ window.addEventListener("click", (e) => {
   if (e.target.classList.contains("auth-modal")) e.target.style.display = "none";
 });
 
+// async function startQRScanner() {
+//     try {
+//         const devices = await Html5Qrcode.getCameras();
+
+//         if (devices && devices.length) {
+//             const cameraId = devices[0].id;
+
+//             const qrScanner = new Html5Qrcode("qrScanner");
+
+//             await qrScanner.start(
+//                 cameraId,
+//                 { fps: 10, qrbox: 250 },
+//                 async (decodedText) => {
+//                     await qrScanner.stop();
 async function startQRScanner() {
     try {
-        const devices = await Html5Qrcode.getCameras();
+        const qrScanner = new Html5Qrcode("qrScanner");
 
-        if (devices && devices.length) {
-            const cameraId = devices[0].id;
-
-            const qrScanner = new Html5Qrcode("qrScanner");
-
-            await qrScanner.start(
-                cameraId,
-                { fps: 10, qrbox: 250 },
-                async (decodedText) => {
-                    await qrScanner.stop();
+        // Use { facingMode: "environment" } to specifically request the back camera
+        await qrScanner.start(
+            { facingMode: "environment" }, 
+            { 
+                fps: 10, 
+                qrbox: { width: 250, height: 250 } // Better practice to use an object
+            },
+            async (decodedText) => {
+                await qrScanner.stop();
 
                     const response = await fetch('https://success-academy.onrender.com/api/validate-unlock-token', {
                         method: 'POST',
@@ -158,16 +171,21 @@ async function startQRScanner() {
                     }
                 }
             );
-
-        } else {
-            alert("❌ No camera found on this device.");
-        }
-
-    } catch (err) {
+            } catch (err) {
         console.error(err);
-        alert("❌ Camera permission denied or not supported.");
+        alert("❌ Camera access error: " + err);
     }
 }
+
+//         } else {
+//             alert("❌ No camera found on this device.");
+//         }
+
+//     } catch (err) {
+//         console.error(err);
+//         alert("❌ Camera permission denied or not supported.");
+//     }
+// }
 // ==========================================
 // 3. REGISTRATION & OTP (Backend Connected)
 // ==========================================
