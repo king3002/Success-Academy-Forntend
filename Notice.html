@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notices | Success Academy</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="Notice.css">
+<link rel="icon" href="image/WEB LOGO.jpg">
+
+</head>
+<body>
+  <div class="bg-3d-elements">
+  <span class="float-item pin">📌</span>
+  <span class="float-item bell">🔔</span>
+  <span class="float-item megaphone">📢</span>
+  <span class="float-item envelope">✉️</span>
+  <span class="float-item clipboard">📋</span>
+</div>
+
+<!-- ================= LOADER ================= -->
+<div class="loader">
+  <div class="spinner"></div>
+</div>
+
+<!-- ================= NAVBAR ================= -->
+<nav class="navbar">
+  <div class="logo">Success Academy</div>
+
+  <!-- Hamburger -->
+  <div class="hamburger" id="hamburger">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+ <!-- Nav Links -->
+  <ul class="nav-links" id="navLinks">
+  <li><a href="Dashboard.html" >Dashboard</a></li>
+  <li><a href="Notice.html"class="active">Notices</a></li>
+  <li><a href="Practice_zone.html">Practice Zone</a></li>
+  <li><a href="Leaderboard.html">Leaderboard</a></li>
+  <li><a href="Ai_Doubt.html">AI Doubt Solver</a></li>
+ <li></li>
+ <button class="logout-btn" onclick="confirmLogout()">Logout</button>
+ </ul>
+</nav>
+<div class="menu-overlay" id="menuOverlay"></div>
+
+<!-- ================= MAIN CONTENT ================= -->
+<section class="notice-container">
+
+  <!-- ===== MARKS RELATED ===== -->
+ <div class="notice-section">
+  <h2>🎯 Marks Related</h2>
+
+  <div class="notes-grid" id="recentMarksGrid">
+    <p style="color: #ccc;">Loading your marks...</p>
+  </div>
+
+  <button class="dropdown-btn" id="viewPreviousMarksBtn" onclick="toggleMarks()" style="display: none;">
+    📉 View Previous Marks
+  </button>
+
+  <div class="previous-marks" id="previousMarks">
+    <div class="notes-grid" id="oldMarksGrid">
+      </div>
+  </div>
+</div>
+
+  <!-- ===== PERSONAL REMARKS ===== -->
+  <div class="notice-section">
+  <h2 class="hed">📝 Personal Remarks</h2>
+
+  <div class="notes-grid" id="recentRemarksGrid"></div>
+
+  <button class="dropdown-btn" id="viewPreviousRemarksBtn"
+          onclick="toggleRemarks()" style="display:none;">
+    📂 View Previous Remarks
+  </button>
+
+  <div class="previous-marks" id="previousRemarks">
+    <div class="notes-grid" id="oldRemarksGrid"></div>
+  </div>
+</div>
+
+  <!-- ===== FEE RELATED ===== -->
+  <div class="notice-section">
+  <h2 class="hed">💰 Fee Related</h2>
+
+  <div class="notes-grid" id="recentFeesGrid"></div>
+
+  <button class="dropdown-btn" id="viewPreviousFeesBtn"
+          onclick="toggleFees()" style="display:none;">
+    📂 View Previous Fees
+  </button>
+
+  <div class="previous-marks" id="previousFees">
+    <div class="notes-grid" id="oldFeesGrid"></div>
+  </div>
+</div>
+
+</section>
+<script>
+const hamburger = document.getElementById("hamburger");
+const navLinks = document.getElementById("navLinks");
+const overlay = document.getElementById("menuOverlay");
+
+hamburger.addEventListener("click", function(){
+  hamburger.classList.toggle("active");
+  navLinks.classList.toggle("active");
+  overlay.classList.toggle("active");
+});
+
+overlay.addEventListener("click", function(){
+  hamburger.classList.remove("active");
+  navLinks.classList.remove("active");
+  overlay.classList.remove("active");
+});
+function confirmLogout(){
+  if(confirm("Are you sure you want to logout?")){
+    window.location.href = "Homepage.html";
+  }
+}
+function toggleMarks(){
+  const section = document.getElementById("previousMarks");
+
+  if(section.style.display === "block"){
+    section.style.display = "none";
+  } else {
+    section.style.display = "block";
+  }
+}
+window.addEventListener("load", function () {
+  const loader = document.querySelector(".loader");
+  if (loader) {
+    loader.style.opacity = "0";
+    setTimeout(() => {
+      loader.style.display = "none";
+    }, 500);
+  }
+});
+document.addEventListener("DOMContentLoaded", async () => {
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    
+    if (!currentUser || currentUser.role !== 'student') {
+        window.location.href = "Homepage.html";
+        return;
+    }
+
+    try {
+        const response = await fetch(`http://localhost:5000/api/student/dashboard/${currentUser.id}`);
+        const data = await response.json();
+
+        if (data.success) {
+            // Render the Marks section
+            renderMarks(data.marks);
+            // Render the Remarks and Fee sections
+            renderOtherNotices(data.notices);
+        }
+    } catch (error) {
+        console.error("Error fetching data:", error);
+    }
+});
+
+function renderMarks(marks) {
+    const recentGrid = document.getElementById("recentMarksGrid");
+    const oldGrid = document.getElementById("oldMarksGrid");
+    const toggleBtn = document.getElementById("viewPreviousMarksBtn");
+
+    recentGrid.innerHTML = "";
+    oldGrid.innerHTML = "";
+
+    if (!marks || marks.length === 0) {
+        recentGrid.innerHTML = "<p style='color: #aaa;'>No marks uploaded yet.</p>";
+        return;
+    }
+
+    marks.forEach((mark, index) => {
+        // ADDED: marks-card class and flying numbers
+        const noteHtml = `
+            <div class="note-card marks-card">
+              <div class="card-particles">
+                <span class="p1">100</span>
+                <span class="p2">+5</span>
+                <span class="p3">98</span>
+                <span class="p4">A+</span>
+                <span class="p5">95</span>
+              </div>
+              <h3>${mark.subject}</h3>
+              <p style="font-size: 14px; margin-bottom: 5px; color: #333;">${mark.exam_title}</p>
+              <p>Score: <strong>${mark.marks_obtained}/${mark.total_marks}</strong></p>
+              <p style="font-size: 11px; color: #555; margin-top: 15px;">Date: ${new Date(mark.exam_date).toLocaleDateString('en-GB')}</p>
+            </div>
+        `;
+        if (index < 3) recentGrid.innerHTML += noteHtml;
+        else oldGrid.innerHTML += noteHtml;
+    });
+
+    if (marks.length > 3) toggleBtn.style.display = "inline-block";
+}
+
+function renderOtherNotices(notices) {
+  const recentRemarks = document.getElementById("recentRemarksGrid");
+  const oldRemarks = document.getElementById("oldRemarksGrid");
+  const remarksBtn = document.getElementById("viewPreviousRemarksBtn");
+
+  const recentFees = document.getElementById("recentFeesGrid");
+  const oldFees = document.getElementById("oldFeesGrid");
+  const feesBtn = document.getElementById("viewPreviousFeesBtn");
+
+  recentRemarks.innerHTML = ""; oldRemarks.innerHTML = "";
+  recentFees.innerHTML = ""; oldFees.innerHTML = "";
+
+  if (!notices || notices.length === 0) return;
+
+  const remarks = notices.filter(n => n.notice_type === "Remarks");
+  const fees = notices.filter(n => n.notice_type === "Fee");
+
+  // 🟡 PERSONAL REMARKS - Pass 'remarks-card' class
+  remarks.forEach((notice, index) => {
+    const note = createNoteCard(notice, 'remarks-card', '💯');
+    if (index < 3) recentRemarks.innerHTML += note;
+    else oldRemarks.innerHTML += note;
+  });
+  if (remarks.length > 3) remarksBtn.style.display = "inline-block";
+
+  // 🟢 FEE RELATED - Pass 'fee-card' class
+  fees.forEach((notice, index) => {
+    const note = createNoteCard(notice, 'fee-card', '₹');
+    if (index < 3) recentFees.innerHTML += note;
+    else oldFees.innerHTML += note;
+  });
+  if (fees.length > 3) feesBtn.style.display = "inline-block";
+}
+
+// ADDED: Accepts typeClass and the specific emoji/symbol to fly
+function createNoteCard(notice, typeClass, symbol) {
+    return `
+        <div class="note-card ${typeClass}">
+            <div class="card-particles">
+                <span class="p1">${symbol}</span>
+                <span class="p2">${symbol}</span>
+                <span class="p3">${symbol}</span>
+                <span class="p4">${symbol}</span>
+                <span class="p5">${symbol}</span>
+            </div>
+            <h3>${notice.title}</h3>
+            <p>${notice.message}</p>
+            <p style="font-size:11px; color:#555; margin-top:15px;">
+                Date: ${new Date(notice.date_posted).toLocaleDateString('en-GB')}
+            </p>
+        </div>
+    `;
+}
+/* ===== TOGGLE FUNCTIONS (MUST BE OUTSIDE) ===== */
+
+function toggleRemarks() {
+  const section = document.getElementById("previousRemarks");
+  section.style.display =
+    section.style.display === "block" ? "none" : "block";
+}
+
+function toggleFees() {
+  const section = document.getElementById("previousFees");
+  section.style.display =
+    section.style.display === "block" ? "none" : "block";
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCQ Practice | Success Academy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="image/WEB LOGO.jpg">
+    <link rel="stylesheet" href="Practice_zone.css">
+    <style>
+        /* ================= HUD PROGRESS BAR ================= */
+        .hud-progress-container {
+            position: fixed; top: 73px; left: 0; width: 100%; height: 3px;
+            background: rgba(255,255,255,0.05); z-index: 2000;
+        }
+        .hud-progress-bar {
+            height: 100%; width: 0%; background: #00ff88;
+            box-shadow: 0 0 10px #00ff88, 0 0 20px #00ff88;
+            transition: width 0.6s cubic-bezier(0.2, 0.9, 0.2, 1);
+        }
+
+/* ================= TERMINAL CARDS ================= */
+        .mcq-container { max-width: 900px; margin: 120px auto 50px; padding: 20px; overflow: hidden; }
+        #questionsWrapper { position: relative; }
+        
+        .question-card { 
+            background: rgba(20, 20, 30, 0.6); border: 1px solid rgba(255,255,255,0.1); 
+            padding: 30px; border-radius: 12px; margin-bottom: 25px; 
+            backdrop-filter: blur(10px); position: relative; overflow: hidden;
+            /* Smooth transitions for states like locking and glowing */
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        /* Ultra-Smooth Staggered Slide-In (Added scaling) */
+        .stagger-card {
+            opacity: 0; transform: translateY(30px) scale(0.96);
+            animation: slideUpIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+        @keyframes slideUpIn { to { opacity: 1; transform: translateY(0) scale(1); } }
+
+        /* Card Locked State */
+        .question-card.locked { opacity: 0.8; pointer-events: none; border-color: #333; }
+        
+        /* Feedback States (Smoothed out the glitch to a soft vibration) */
+        .card-correct { border-color: #00ff88 !important; box-shadow: 25px 25px 25px rgba(0,255,136,0.15); transform: scale(1.01); }
+        .card-incorrect { border-color: #ff4d4d !important; animation: softErrorShake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97); box-shadow: 0 0 25px rgba(255,77,77,0.15); }
+        
+        @keyframes softErrorShake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-4px); }
+            40% { transform: translateX(4px); }
+            60% { transform: translateX(-2px); }
+            80% { transform: translateX(2px); }
+        }
+
+        /* Verification Stamp (Smoother slam) */
+        .verification-stamp {
+            position: absolute; right: 30px; top: 30px; font-size: 50px; opacity: 0; 
+            transform: scale(2.5) rotate(20deg); pointer-events: none;
+        }
+        .stamp-in { animation: stampSlam 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        @keyframes stampSlam { to { opacity: 0.4; transform: scale(1) rotate(0deg); } }
+
+        /* ================= HIGH-TECH OPTIONS ================= */
+        .options-list { list-style: none; margin-top: 20px; }
+        .options-list li { margin-bottom: 12px; }
+        
+        .options-list label { 
+            display: flex; align-items: center; gap: 15px; cursor: pointer; 
+            padding: 12px 15px; background: rgba(255,255,255,0.03); 
+            border: 1px solid transparent; border-radius: 8px; 
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); 
+        }
+        .options-list label:hover { background: rgba(255,204,0,0.05); border-color: rgba(255,204,0,0.3); transform: translateX(5px); }
+
+        /* Option Feedback */
+        .opt-correct { border-color: #00ff88 !important; background: rgba(0,255,136,0.05) !important; color: #00ff88; text-shadow: 0 0 8px rgba(0,255,136,0.5); transform: translateX(5px); }
+        .opt-incorrect { border-color: #ff4d4d !important; background: rgba(255,77,77,0.05) !important; color: #ff4d4d; text-decoration: line-through; opacity: 0.6; }
+
+        /* --- THE NEW BIG LOCK RADIO BUTTON --- */
+        input[type="radio"] { display: none; }
+        
+        .custom-radio { 
+            width: 22px; height: 22px; border: 2px solid #666; border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; 
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); flex-shrink: 0;
+            position: relative;
+        }
+        
+        /* When clicked: Dissolve the circle and reveal a glowing, scaling lock */
+        input[type="radio"]:checked + .custom-radio { 
+            border: none; background: transparent; width: 22px; height: 22px; 
+            transform: scale(1.3); /* Pops the lock up nicely */
+        }
+        
+        input[type="radio"]:checked + .custom-radio::after { 
+            content: '🔒'; 
+            font-size: 22px; /* Much bigger lock */
+            position: absolute;
+            filter: drop-shadow(0 0 8px rgba(255,204,0,0.6));
+            animation: popLock 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        @keyframes popLock {
+            0% { transform: scale(0.5); opacity: 0; }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* ================= BUTTONS & SWIPES ================= */
+        .pagination-controls { display: flex; justify-content: space-between; align-items: center; margin-top: 40px; }
+        .submit-q-btn { 
+            background: transparent; color: #ffcc00; padding: 10px 20px; 
+            border: 1px solid #ffcc00; border-radius: 6px; font-weight: 600; 
+            cursor: pointer; margin-top: 20px; transition: all 0.3s ease; letter-spacing: 1px;
+        }
+        .submit-q-btn:hover { background: #ffcc00; color: #000; box-shadow: 0 0 20px rgba(255,204,0,0.5); transform: translateY(-2px); }
+        .submit-q-btn:disabled { border-color: #555; color: #aaa; cursor: not-allowed; background: transparent; box-shadow: none; transform: none; }
+
+        /* Smoothed Swipe Animations (Reduced distance, softer easing) */
+        .swipe-out-left { animation: swipeOutL 0.4s forwards cubic-bezier(0.4, 0.0, 0.2, 1); }
+        .swipe-in-right { animation: swipeInR 0.5s forwards cubic-bezier(0.16, 1, 0.3, 1); }
+        .swipe-out-right { animation: swipeOutR 0.4s forwards cubic-bezier(0.4, 0.0, 0.2, 1); }
+        .swipe-in-left { animation: swipeInL 0.5s forwards cubic-bezier(0.16, 1, 0.3, 1); }
+        
+        @keyframes swipeOutL { to { transform: translateX(-40px); opacity: 0; } }
+        @keyframes swipeInR { from { transform: translateX(40px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes swipeOutR { to { transform: translateX(40px); opacity: 0; } }
+        @keyframes swipeInL { from { transform: translateX(-40px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        /* ================= FINAL ASSESSMENT ================= */
+        .final-result-card { 
+            text-align: center; padding: 60px 40px; background: rgba(0,0,0,0.4); 
+            border-radius: 15px; border: 2px solid #555; display: none; backdrop-filter: blur(15px);
+            transition: all 0.5s ease;
+        }
+        .score-counter { font-size: 70px; font-weight: 800; text-shadow: 0 0 20px currentColor; margin: 20px 0; }
+        
+        .result-high { border-color: #00ff88; box-shadow: 0 0 40px rgba(0,255,136,0.2), inset 0 0 20px rgba(0,255,136,0.1); color: #00ff88; }
+        .result-mid { border-color: #ffcc00; box-shadow: 0 0 40px rgba(255,204,0,0.2), inset 0 0 20px rgba(255,204,0,0.1); color: #ffcc00; }
+        .result-low { border-color: #ff4d4d; box-shadow: 0 0 40px rgba(255,77,77,0.2), inset 0 0 20px rgba(255,77,77,0.1); color: #ff4d4d; }
+        
+        .badge-improvement { display: inline-block; background: rgba(255,77,77,0.15); color: #ff4d4d; border: 1px solid #ff4d4d; padding: 6px 12px; border-radius: 4px; font-size: 13px; font-weight: bold; margin-bottom: 20px; letter-spacing: 1px;}
+        
+        /* Bottom Sheet Border Update */
+        .sheet-content { border-top: 4px solid #333; transition: border-color 0.3s; }
+        .sheet-content.correct { border-top-color: #00ff88; }
+        .sheet-content.wrong { border-top-color: #ff4d4d; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="logo" id="testHeaderTitle">Loading Test...</div>
+    <ul class="nav-links">
+        <li><a href="Practice_zone.html" style="color: #ff4d4d;">Abort Assessment</a></li>
+    </ul>
+</nav>
+
+<div class="hud-progress-container">
+    <div class="hud-progress-bar" id="hudProgressBar"></div>
+</div>
+
+<div class="mcq-container">
+    <div id="questionsWrapper"></div>
+    
+    <div class="final-result-card" id="finalResultScreen">
+        <h2 style="font-size: 24px; color: #fff; text-transform: uppercase; letter-spacing: 2px;">Diagnostic Complete</h2>
+        <div id="badgeContainer"></div>
+        <div class="score-counter" id="accuracyDisplay">0%</div>
+        <p style="font-size: 16px; color: #aaa; margin-bottom: 40px;">System Verification Finished</p>
+        
+        <button class="start-btn" onclick="resetTest()">Re-initialize Bank</button>
+        <button class="start-btn" style="background: transparent; border: 1px solid #ffcc00; color: #ffcc00; margin-left: 10px;" onclick="window.location.href='Practice_zone.html'">Return to Dashboard</button>
+    </div>
+
+    <div class="pagination-controls" id="paginationControls">
+        <button class="action-btn" id="prevBtn" onclick="triggerSwipe(-1)">◄ Prev Data</button>
+        <span id="pageIndicator" style="color: #aaa; font-weight: 500; font-family: monospace; letter-spacing: 1px;">PAGE 01</span>
+        <button class="action-btn" id="nextBtn" onclick="triggerSwipe(1)">Next Data ►</button>
+    </div>
+</div>
+
+<div id="mcqBottomSheet" class="bottom-sheet">
+    <div class="sheet-content">
+        <h3 id="sheetTitle">Result</h3>
+        <p id="sheetExplanation">Explanation goes here...</p>
+        <button class="start-btn" onclick="closeBottomSheet()">Acknowledge</button>
+    </div>
+</div>
+
+<script src="MCQ_Test.js"></script>
+</body>
+</html>

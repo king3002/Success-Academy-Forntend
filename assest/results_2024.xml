@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<results>
+
+  <student>
+    <name>Rahul Patil</name>
+    <marks>98</marks>
+    <exam>MHT-CET</exam>
+  </student>
+
+  <student>
+    <name>Priya Shah</name>
+    <marks>97</marks>
+    <exam>JEE</exam>
+  </student>
+
+  <student>
+    <name>Aman Kulkarni</name>
+    <marks>96</marks>
+    <exam>NEET</exam>
+  </student>
+
+  <student>
+    <name>Sneha Deshmukh</name>
+    <marks>95</marks>
+    <exam>MHT-CET</exam>
+  </student>
+
+  <student>
+    <name>Rohan Joshi</name>
+    <marks>94</marks>
+    <exam>JEE</exam>
+  </student>
+
+</results>

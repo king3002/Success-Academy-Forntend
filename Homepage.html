@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Success Academy, Vita</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="Main.css">
+<script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
+<link rel="icon" href="image/WEB LOGO.jpg">
+</head>
+
+<body>
+
+<div class="auth-modal" id="applyModal">
+  <div class="login-box"> <button class="close-btn">&times;</button>
+    <h2>Apply for Admission</h2>
+    <p style="color: #ccc; margin-bottom: 20px; font-size: 14px; text-align: center;">Fill this form to inquire. Our team will contact you for the admission process.</p>
+    
+    <form id="admissionInquiryForm" class="registration-form">
+      <input type="text" id="applyName" placeholder="Student Name" required>
+      <input type="tel" id="applyPhone" placeholder="Mobile Number" required>
+      <input type="email" id="applyEmail" placeholder="Email Address" required>
+      <input type="tel" id="applyParentPhone" placeholder="Parent Mobile Number" required>
+      <input type="text" id="applySchool" placeholder="School Name" required>
+
+      <label>Standard</label>
+      <select id="applyStandard" required>
+        <option value="">Select Standard</option>
+        <option value="11th">11th Standard</option>
+        <option value="12th">12th Standard</option>
+      </select>
+      
+      <label>Group</label>
+      <select id="applyGroup" required>
+        <option value="">Select Group</option>
+        <option>PCM</option>
+        <option>PCB</option>
+        <option>PCMB</option>
+      </select>
+
+      <label>Type</label>
+      <select id="applyType" required>
+        <option value="">Select Type</option>
+        <option value="Regular">Regular</option>
+        <option value="Regular+Academy">Regular+Academy</option>
+        <option value="Crash Course">Crash Course</option>
+      </select>
+
+      <label>Select Course</label>
+      <div class="course-options">
+        <label><input type="checkbox" class="apply-course-cb" value="MHT-CET"><span>MHT-CET</span></label>
+        <label><input type="checkbox" class="apply-course-cb" value="JEE"><span>JEE</span></label>
+        <label><input type="checkbox" class="apply-course-cb" value="NEET"><span>NEET</span></label>
+      </div>
+
+      <button type="submit" class="glass-btn">Submit Application</button>
+    </form>
+  </div>
+</div>
+
+<div class="auth-modal" id="unlockModal">
+  <div class="auth-box">
+    <button class="close-btn">&times;</button>
+    <h2>Scan QR to Unlock</h2>
+<div id="qrScanner" style="width:300px; margin:auto;"></div>
+    <p style="color:#ccc; font-size:14px; margin-top:10px;">
+      Scan the QR provided by the Academy.
+    </p>
+  </div>
+</div>
+
+<div class="auth-modal" id="registerModal">
+  <div class="login-box">
+    <button class="close-btn">&times;</button>
+    <h2>Student Registration</h2>
+    <form id="registrationForm" class="registration-form">
+      <input type="text" id="regName" placeholder="Student Name" required>
+<input type="tel" id="regPhone" placeholder="Mobile Number" required>
+<input type="email" id="regEmail" placeholder="Email Address" required>
+<input type="tel" id="regParentPhone" placeholder="Parent Mobile Number" required>
+<input type="text" id="regSchool" placeholder="School Name" required>
+
+
+      <label>Standard</label>
+      <select id="regStandard" required>
+        <option value="">Select Standard</option>
+        <option value="11th">11th Standard</option>
+        <option value="12th">12th Standard</option>
+      </select>
+      
+      <label>Group</label>
+      <select id="regGroup" required>
+        <option value="">Select Group</option>
+        <option>PCM</option>
+        <option>PCB</option>
+        <option>PCMB</option>
+      </select>
+
+      <label>Type</label>
+      <select id="regType" required>
+        <option value="">Select Type</option>
+        <option value="Regular">Regular</option>
+        <option value="Regular+Academy">Regular+Academy</option>
+        <option value="Crash Course">Crash Course</option>
+      </select>
+
+      <label>Select Course</label>
+      <div class="course-options">
+        <label><input type="checkbox" value="MHT-CET"><span>MHT-CET</span></label>
+        <label><input type="checkbox" value="JEE"><span>JEE</span></label>
+        <label><input type="checkbox" value="NEET"><span>NEET</span></label>
+      </div>
+
+      <button type="submit" class="glass-btn">Register</button>
+    </form>
+  </div>
+</div>
+
+<div class="auth-modal" id="loginModal">
+  <div class="auth-box">
+    <button class="close-btn">&times;</button>
+    <h2>Student Login</h2>
+    <form id="loginForm">
+      <input type="text" placeholder="Registration Number" required>
+      <input type="password" placeholder="Password" required>
+      
+      <div class="remember-box" style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; font-size: 14px; color: #ccc;">
+        <input type="checkbox" id="rememberMe">
+        <label for="rememberMe">Remember Me</label>
+      </div>
+
+      <button type="submit" class="glass-btn">Login</button>
+    </form>
+    <div class="login-success">✅ Login Successful!</div>
+  </div>
+</div>
+
+<div class="auth-modal" id="otpModal">
+  <div class="auth-box">
+    <h2>Verify OTP</h2>
+    <p style="text-align:center; margin-bottom:20px;">Enter the OTP sent to your mobile number</p>
+    <input type="text" id="otpInput" placeholder="Enter 4-digit OTP" maxlength="4">
+    <button class="glass-btn" id="verifyOtpBtn">Verify OTP</button>
+    <div class="otp-error">❌ Incorrect OTP</div>
+  </div>
+</div>
+
+<div class="auth-modal" id="successModal">
+  <div class="auth-box" style="text-align:center;">
+    <div class="checkmark">✔</div>
+    <h2>Registration Successful</h2>
+    <p>Registration done.<br>Check your Email or SMS for<br>Registration No & Password.</p>
+  </div>
+</div>
+
+<div class="loader">
+  <div class="spinner"></div>
+</div>
+
+<div id="particles-js"></div>
+
+<nav class="navbar">
+  <div class="logo">Success Academy</div>
+
+  <div class="hamburger" id="hamburger">
+    <span></span><span></span><span></span>
+  </div>
+
+  <div class="nav-menu" id="navMenu">
+    <div class="nav-links">
+      <a href="Homepage.html">Home</a>
+      <a href="Result-page.html">Our Result</a>
+    </div>
+
+    <div id="publicButtons" class="auth-group">
+      <button class="btn-primary" id="openApplyModal">Apply for Admission</button>
+      <button class="btn-outline unlock-btn" id="openUnlockModal">Unlock Registration</button>
+    </div>
+
+    <div id="unlockedButtons" class="auth-group" style="display: none;">
+      <button class="btn-primary" id="openRegisterModal">Register Now</button>
+      <button class="btn-outline" id="openLoginModal">Login</button>
+    </div>
+
+    <div id="registeredButtons" class="auth-group" style="display: none;">
+      <button class="btn-outline" id="openLoginOnly">Login</button>
+    </div>
+  </div>
+</nav>
+
+<section id="home" class="hero-clean">
+  <div class="hero-overlay">
+    <h1>Success Academy, Vita</h1>
+    <p>11th & 12th Science | MHT-CET | JEE | NEET</p>
+  </div>
+</section>
+
+<section id="about" class="reveal section">
+  <h2 class="section-title">About Us</h2>
+  <p>Welcome to Success Academy, where excellence in education meets unparalleled support and guidance. We specialize in preparing students for their 11th and 12th-grade academic journey, ensuring they excel in their studies and beyond...</p>
+</section>
+
+<section class="stats">
+  <div class="stat-card">
+    <h3 class="counter" data-target="12">0</h3>
+    <p>Years of Teaching</p>
+  </div>
+  <div class="stat-card">
+    <h3 class="counter" data-target="15000">0</h3>
+    <p>Students Trained</p>
+  </div>
+  <div class="stat-card">
+    <h3 class="counter" data-target="2">0</h3>
+    <p>Branches</p>
+  </div>
+</section>
+
+<section class="image-slider-section reveal">
+  <h2 class="section-title">Our Achievements</h2>
+  <div class="image-slider">
+    <img src="image/download.jpeg" class="slide active">
+    <img src="image/download (1).jpeg" class="slide">
+    <img src="image/download (2).jpeg" class="slide">
+    <img src="image/download m.jpeg" class="slide">
+    <button class="prev">&#10094;</button>
+    <button class="next">&#10095;</button>
+    <div class="dots">
+      <span class="dot active"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+    </div>
+  </div>
+</section>
+
+<section id="infra" class="section reveal">
+  <h2 class="section-title">Infrastructure</h2>
+  <div class="video-container">
+    <video id="academyVideo" autoplay loop muted playsinline><source src="image/infra.mp4" type="video/mp4"></video>
+    <button class="sound-btn" id="soundToggle">🔇</button>
+  </div>
+</section>
+
+<section id="goals" class="section reveal">
+  <h2 class="section-title">Select Your Goal</h2>
+  <div class="paper-container">
+    <div class="exam-paper" data-course="MHT-CET"><div class="clip"></div><div class="paper-content"><h3>MHT-CET</h3><p>Engineering Entrance Exam</p></div></div>
+    <div class="exam-paper" data-course="JEE"><div class="clip"></div><div class="paper-content"><h3>JEE</h3><p>National Level Engineering Exam</p></div></div>
+    <div class="exam-paper" data-course="NEET"><div class="clip"></div><div class="paper-content"><h3>NEET</h3><p>Medical Entrance Exam</p></div></div>
+  </div>
+</section>
+
+<section id="contact" class="section reveal">
+  <h2 class="section-title">Contact Us</h2>
+  <div class="glass-panel">
+    <form id="contactForm" class="contact-form">
+      <input type="text" name="name" placeholder="Name" required>
+      <input type="email" name="email" placeholder="Email" required>
+      <input type="tel" name="phone" placeholder="Phone" required>
+      <input type="text" name="subject" placeholder="Subject" required>
+      <textarea name="message" placeholder="Message" required></textarea>
+      <button type="submit" class="glass-btn" id="sendBtn">Send Message</button>
+      <div class="contact-success">✅ Email Sent Successfully!</div>
+    </form>
+  </div>
+</section>
+
+<section class="social reveal">
+  <a href="https://www.youtube.com/@successacademyvita" target="_blank" class="social-btn youtube"><span>YouTube</span></a>
+  <a href="https://www.justdial.com/Sangli/Success-Academy-Vita-Opposite-S-T-Stnad-Khanapur-Road-Vita-City/9999PX233-X233-230704073622-G7T8_BZDET" target="_blank" class="social-btn justdial"><span>Justdial</span></a>
+  <a href="https://www.facebook.com/p/Success-Academy-Vita-100067153237967/" target="_blank" class="social-btn facebook"><span>Facebook</span></a>
+  <a href="https://www.instagram.com/scienceshaala/?igsh=MXA3ZmExcGJ6bnNobQ%3D%3D" target="_blank" class="social-btn instagram"><span>Instagram</span></a>
+</section>
+<div class="auth-modal" id="graduationModal">
+    <div class="auth-box" style="text-align: center; max-width: 450px; padding: 40px 30px;">
+      <button class="close-btn" onclick="document.getElementById('graduationModal').style.display='none'">&times;</button>
+      
+      <div style="font-size: 70px; margin-bottom: 15px;">🏆</div>
+      
+      <h2 style="color: #ffcc00; margin-bottom: 15px; font-size: 24px;">Happy Graduation!</h2>
+      
+      <p id="graduationMessageText" style="color: #ccc; font-size: 16px; line-height: 1.6;"></p>
+      
+      <button class="glass-btn" style="margin-top: 25px; width: 100%;" onclick="document.getElementById('graduationModal').style.display='none'">Close</button>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Success Academy | Designed by Ketaki</p>
+  </footer>
+
+  </div>
+ <script src="https://unpkg.com/html5-qrcode"></script>
+<script src="Main.js"></script>
+</body>
+</html>

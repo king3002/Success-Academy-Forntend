@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Assessment | Success Academy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="DC.css">
+    <link rel="icon" href="image/WEB LOGO.jpg">
+</head>
+<body>
+
+    <div id="selectionScreen" class="screen-container active">
+        <div class="glass-panel">
+            <h1 class="glitch-text">Weekend Live Challenges</h1>
+            <p style="color: #aaa; margin-bottom: 30px;">Available only on Saturdays and Sundays for qualified students.</p>
+            
+            <div id="eligibilityMessage" class="alert-box hidden"></div>
+            
+            <div id="examOptions" class="exam-grid">
+                </div>
+            
+            <button class="return-btn" onclick="window.location.href='Practice_zone.html'">Return to Dashboard</button>
+        </div>
+    </div>
+
+    <div id="instructionScreen" class="screen-container hidden">
+        <div class="glass-panel instruction-panel">
+            <h2 style="color: #ffcc00; border-bottom: 1px solid rgba(255,204,0,0.3); padding-bottom: 10px; margin-bottom: 20px;">System & Security Check</h2>
+            
+            <ul class="instruction-list">
+                <li><strong>Strict Proctoring:</strong> Your camera must remain active during the entire test.</li>
+                <li><strong>Environment:</strong> The test will launch in Fullscreen mode. Exiting Fullscreen will trigger a warning.</li>
+                <li><strong>Tab Switching:</strong> Navigating away from the test tab will result in an immediate warning. Multiple violations will auto-submit your exam.</li>
+                <li><strong>Interface:</strong> The layout mirrors the official NTA (JEE/NEET) computer-based test interface.</li>
+            </ul>
+
+            <div class="security-check-box">
+                <p id="camStatus">⏳ Waiting for Camera Permission...</p>
+                <video id="previewCam" autoplay muted playsinline></video>
+            </div>
+
+            <div style="display: flex; gap: 15px; margin-top: 30px;">
+                <button class="action-btn btn-secondary" onclick="cancelTest()">Abort</button>
+                <button class="action-btn btn-primary" id="startTestBtn" disabled onclick="initializeProctoredTest()">Initialize Secure Assessment</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="examScreen" class="exam-layout hidden">
+        <header class="exam-header">
+            <div class="exam-title" id="liveExamTitle">JEE Main - Mock Test</div>
+            <div class="exam-timer">Time Left: <span id="timeLeft">00:00:00</span></div>
+        </header>
+
+        <div class="exam-body">
+            <div class="question-section">
+                <div class="question-header">
+                    <h3>Question <span id="qNumberDisplay">1</span></h3>
+                </div>
+                
+                <div class="question-content" id="questionText">Loading question data...</div>
+                
+                <div class="options-container" id="optionsContainer">
+                    </div>
+            </div>
+
+            <div class="sidebar-section">
+                <div class="proctor-feed">
+                    <video id="liveCam" autoplay muted playsinline></video>
+                    <div class="rec-indicator"><span></span> REC</div>
+                </div>
+
+                <div class="palette-header">Question Palette</div>
+                <div class="palette-grid" id="paletteGrid">
+                    </div>
+
+                <div class="palette-legend">
+                    <div class="legend-item"><span class="badge answered"></span> Answered</div>
+                    <div class="legend-item"><span class="badge not-answered"></span> Not Answered</div>
+                    <div class="legend-item"><span class="badge not-visited"></span> Not Visited</div>
+                    <div class="legend-item"><span class="badge review"></span> Marked for Review</div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="exam-footer">
+            <div class="left-actions">
+                <button class="footer-btn btn-mark" onclick="markForReview()">Mark for Review & Next</button>
+                <button class="footer-btn btn-clear" onclick="clearResponse()">Clear Response</button>
+            </div>
+            <div class="right-actions">
+                <button class="footer-btn btn-save" onclick="saveAndNext()">Save & Next</button>
+                <button class="footer-btn btn-submit" onclick="confirmFinalSubmit()">Submit Test</button>
+            </div>
+        </footer>
+    </div>
+
+    <div id="resultScreen" class="screen-container hidden">
+        <div class="glass-panel result-panel">
+            <h1 style="color: #00ff88; margin-bottom: 5px;">Diagnostic Report</h1>
+            <p id="resultExamName" style="color: #ccc; margin-bottom: 30px;">JEE Main Mock - 12/10/2026</p>
+
+            <div class="score-card">
+                <div class="score-box">
+                    <h3>Total Score</h3>
+                    <div class="score-value" id="finalScoreDisplay">0 / 0</div>
+                </div>
+                <div class="stats-row">
+                    <div class="stat"><span style="color: #00ff88;">✓ Correct:</span> <span id="correctCount">0</span></div>
+                    <div class="stat"><span style="color: #ff4d4d;">✖ Incorrect:</span> <span id="incorrectCount">0</span></div>
+                    <div class="stat"><span style="color: #aaa;">⊘ Unattempted:</span> <span id="unattemptedCount">0</span></div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 40px; border-bottom: 1px solid #333; padding-bottom: 10px;">Detailed Analysis</h3>
+            <div id="analysisContainer" class="analysis-list">
+                </div>
+
+<button class="action-btn btn-primary" style="margin-top: 30px; width: 100%;" onclick="exitExamAndReturn()">Acknowledge & Return</button>
+        </div>
+    </div>
+
+    <div id="warningModal" class="warning-overlay hidden">
+        <div class="warning-box">
+            <h2>⚠️ SECURITY VIOLATION</h2>
+            <p id="warningText">Tab switching or exiting Fullscreen is strictly prohibited.</p>
+            <p style="color: #ff4d4d; font-weight: bold; margin-top: 10px;">Further violations will result in automatic submission.</p>
+            <button class="action-btn btn-secondary" style="margin-top: 20px;" onclick="dismissWarning()">I Understand</button>
+        </div>
+    </div>
+    <div id="submitConfirmModal" class="warning-overlay hidden">
+        <div class="warning-box" style="border-color: #ffcc00; box-shadow: 0 0 50px rgba(255,204,0,0.3);">
+            <h2 style="color: #ffcc00;">Confirm Submission</h2>
+            <p id="submitConfirmText">Are you sure you want to submit the exam?</p>
+            <div style="display: flex; gap: 15px; justify-content: center; margin-top: 25px;">
+                <button class="action-btn btn-secondary" style="border-color: #aaa; color: #aaa;" onclick="closeSubmitConfirm()">Cancel</button>
+                <button class="action-btn btn-primary" onclick="executeFinalSubmit()">Yes, Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="DC.js"></script>
+</body>
+</html>

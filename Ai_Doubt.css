@@ -1,0 +1,710 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #0f0f1a;
+  color: white;
+}
+
+/* ================= NAVBAR ================= */
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding: 20px 8%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #121225;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  z-index: 3000;
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: 700;
+  color: #ffcc00;
+}
+
+.nav-links {
+  display: flex;
+  gap: 30px;
+  list-style: none;
+  align-items: center;
+}
+
+.nav-links li {
+  position: relative;
+}
+
+.nav-links li a {
+  text-decoration: none;
+  color: white;
+  font-weight: 500;
+  transition: 0.3s;
+  position: relative;
+}
+
+.nav-links li a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 0%;
+  height: 2px;
+  background: #ffcc00;
+  transition: 0.4s;
+}
+
+.nav-links li a:hover::after {
+  width: 100%;
+}
+
+.nav-links li a:hover,
+.nav-links li a.active {
+  color: #ffcc00;
+}
+
+.logout-btn {
+  background: linear-gradient(90deg, #ff4d4d, #ff1a1a);
+  border: none;
+  padding: 8px 18px;
+  border-radius: 8px;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+}
+
+.logout-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255,0,0,0.4);
+}
+
+/* Hamburger & Overlay */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  cursor: pointer;
+  z-index: 3500;
+}
+
+.hamburger span {
+  width: 26px;
+  height: 3px;
+  background: #ffffff;
+  border-radius: 3px;
+  transition: 0.4s ease;
+}
+
+.menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 2000;
+}
+
+.menu-overlay.active { opacity: 1; pointer-events: auto; }
+
+/* ================= MOBILE NAV FIX (Matches Dashboard) ================= */
+@media(max-width:768px){
+  .hamburger{
+    display:flex;
+  }
+
+  .nav-links{
+    position:fixed;
+    top:0;
+    right:-100%;
+    height:100vh;
+    width:320px;   /* Match Dashboard */
+    background:linear-gradient(180deg,#121225,#0f0f1a);
+    flex-direction:column;
+    justify-content:center;
+    align-items:flex-start;   /* Left alignment fix */
+    padding:0 50px;           /* Spacing fix */
+    gap:35px;
+    transition:0.4s cubic-bezier(.77,0,.18,1);
+    border-left:1px solid rgba(255,255,255,0.1);
+    z-index:2500;
+  }
+
+  .nav-links.active{
+    right:0;
+  }
+
+  .nav-links li{
+    width:100%;
+  }
+
+  .nav-links a{
+    font-size:18px; /* Text size fix */
+  }
+
+  .logout-btn{
+    width:100%;     /* Full width button fix */
+    padding:12px 0;
+    border-radius:12px;
+    text-align:center;
+  }
+
+  .hamburger.active span:nth-child(1){ transform:rotate(45deg) translate(5px,5px); }
+  .hamburger.active span:nth-child(2){ opacity:0; }
+  .hamburger.active span:nth-child(3){ transform:rotate(-45deg) translate(6px,-6px); }
+}
+
+/* ================= AI PAGE LAYOUT ================= */
+.ai-container {
+  margin-top: 120px;
+  padding: 60px 8%;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.page-title {
+  font-size: 32px;
+  color: #ffcc00;
+  margin-bottom: 10px;
+}
+
+.subtitle {
+  color: #ccc;
+  margin-bottom: 40px;
+  font-size: 15px;
+}
+
+/* Input Area */
+.ai-input-box {
+  background: rgba(255,255,255,0.05);
+  padding: 30px;
+  border-radius: 15px;
+  border: 1px solid rgba(255,255,255,0.1);
+  backdrop-filter: blur(15px);
+}
+
+textarea {
+  width: 100%;
+  min-height: 150px;
+  padding: 20px;
+  border-radius: 12px;
+  background: rgba(0,0,0,0.3);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.2);
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  resize: vertical;
+  outline: none;
+  transition: 0.3s ease;
+}
+
+textarea:focus {
+  border-color: #ffcc00;
+  box-shadow: 0 0 10px rgba(255,204,0,0.2);
+}
+
+.glass-btn {
+  margin-top: 20px;
+  padding: 12px 30px;
+  background: #ffcc00;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 16px;
+  color: black;
+  cursor: pointer;
+  transition: 0.3s;
+  font-family: 'Poppins', sans-serif;
+  width: 100%;
+}
+
+.glass-btn:hover {
+  background: #ff9900;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255,204,0,0.3);
+}
+
+/* ================= RESULT AREA & KIRANA SHOP ANIMATION ================= */
+.result-area {
+  margin-top: 40px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.ai-loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  padding: 40px;
+  color: #ffcc00;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid rgba(255,255,255,0.1);
+  border-top: 5px solid #ffcc00;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+
+/* The Main Kirana Shop Boundary */
+.shutter-container {
+  position: relative;
+  width: 100%;
+  height: 420px;
+  background: #111; 
+  border-radius: 8px 8px 0 0;
+  overflow: hidden; 
+  box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+  border-bottom: 12px solid #222; /* Street base */
+}
+
+/* The Main Kirana Shop Boundary (Thinner borders) */
+.shutter-container {
+  position: relative;
+  width: 100%;
+  height: 450px; /* Slightly taller to fit the jars */
+  background: #111; 
+  border-radius: 6px 6px 0 0;
+  overflow: hidden; 
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  border-bottom: 5px solid #222; /* Thinner street base */
+}
+
+/* --- LAYER 1: SHOP INTERIOR --- */
+.shop-interior {
+  position: absolute;
+  top: 20px; 
+  bottom: 85px; /* HIGH ENOUGH SO TEXT NEVER HITS THE JARS */
+  left: 10px; /* Thinner pillar gap */
+  right: 10px; /* Thinner pillar gap */
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 4px;
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+  z-index: 1; 
+  padding: 20px 10px 10px 10px;
+}
+
+.toran {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 12px;
+  background: repeating-linear-gradient(
+    135deg,
+    #FF9933 0px, #FF9933 10px, 
+    #FFCC00 10px, #FFCC00 20px, 
+    #228B22 20px, #228B22 25px 
+  );
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.5);
+  z-index: 5;
+}
+
+.result-content {
+  width: 100%;
+  height: 100%;
+  margin-top: 10px; 
+}
+
+/* --- LAYER 2: THE ROLLING SHUTTER --- */
+.shop-shutter {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    to bottom,
+    #888c94,
+    #888c94 10px, /* Thinner shutter lines */
+    #696d75 10px,
+    #696d75 20px
+  );
+  border-bottom: 10px solid #ffcc00; 
+  box-shadow: inset 0 -10px 20px rgba(0,0,0,0.7);
+  z-index: 10; 
+  transition: transform 5s cubic-bezier(0.85, 0, 0.15, 1); 
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.shutter-lock {
+  width: 35px;
+  height: 12px;
+  background: #222;
+  margin-bottom: -10px; 
+  border-radius: 3px 3px 0 0;
+}
+
+.shutter-container.open .shop-shutter {
+  transform: translateY(-100%);
+}
+
+/* --- LAYER 3: EXTERIOR & JARS --- */
+.shop-tin-roof {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 20px;
+  background: repeating-linear-gradient(
+    to right,
+    #2b5797, #2b5797 15px,
+    #1d3f75 15px, #1d3f75 30px
+  );
+  z-index: 20; 
+  box-shadow: 0 5px 10px rgba(0,0,0,0.6);
+  border-bottom: 3px solid #11264c;
+  transform-origin: top;
+  transform: perspective(300px) rotateX(15deg);
+}
+
+.shop-pillars {
+  position: absolute;
+  top: 20px;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  pointer-events: none; 
+  border-left: 10px solid #8b4513; /* Thinner, wooden-looking pillars */
+  border-right: 10px solid #8b4513;
+  z-index: 20;
+}
+
+.shop-counter {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 20px; /* Thinner counter */
+  background: linear-gradient(to bottom, #754b24, #4a2e12); 
+  border-top: 2px solid #36200a;
+  z-index: 20;
+}
+
+/* --- THE KIRANA JARS --- */
+.jar {
+  position: absolute;
+  bottom: 20px; 
+  width: 35px;
+  height: 55px;
+  background: rgba(255, 255, 255, 0.15); 
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 5px 5px 8px 8px;
+  box-shadow: inset -3px 0 8px rgba(0,0,0,0.3), 5px 5px 8px rgba(0,0,0,0.5);
+  z-index: 25;
+  cursor: pointer; /* <-- Added: Shows it's interactive */
+}
+
+/* The Jar Lids */
+.jar::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 2px;
+  right: 2px;
+  height: 5px;
+  border-radius: 2px 2px 0 0;
+  transform-origin: bottom right; /* <-- Added: Hinges the lid on the right side */
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* <-- Added: Gives a nice bouncy pop effect */
+}
+
+/* The Pop-Open Hover Effect */
+.jar:hover::before {
+  transform: translateY(-10px) rotate(25deg);
+}
+
+/* NEW: The Glow Effect for the Jars */
+.jar:hover {
+  box-shadow: inset -3px 0 8px rgba(0,0,0,0.3), 0 0 15px rgba(255, 255, 255, 0.8);
+}
+
+/* The Jar Contents */
+.jar::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 2px;
+  right: 2px;
+  border-radius: 0 0 5px 5px;
+}
+
+/* Jar 1: Yellow Namkeen (Far Left) */
+.jar1 { left: 8%; }
+.jar1::before { background: #d32f2f; } /* Red Lid */
+.jar1::after { height: 35px; background: #e6b800; } 
+
+/* Jar 2: Red Candies */
+.jar2 { left: 24%; width: 30px; height: 45px;}
+.jar2::before { background: #1976d2; } /* Blue Lid */
+.jar2::after { height: 25px; background: #e53935; } 
+
+/* Jar 3: Green Candies */
+.jar3 { left: 40%; }
+.jar3::before { background: #fbc02d; } /* Yellow Lid */
+.jar3::after { height: 30px; background: #43a047; } 
+
+/* Jar 4: Orange Pulses */
+.jar4 { right: 40%; width: 30px; height: 45px;}
+.jar4::before { background: #8e24aa; } /* Purple Lid */
+.jar4::after { height: 28px; background: #fb8c00; } 
+
+/* Jar 5: White Sugar Candies (Batasha) */
+.jar5 { right: 24%; }
+.jar5::before { background: #00acc1; } /* Teal Lid */
+.jar5::after { height: 38px; background: #f5f5f5; } 
+
+/* Jar 6: Brown Chocolates (Far Right) */
+.jar6 { right: 8%; width: 30px; height: 45px;}
+.jar6::before { background: #e53935; } /* Red Lid */
+.jar6::after { height: 22px; background: #6d4c41; }
+
+/* --- ANSWER BOX STYLING (Ensure transparent background so it blends) --- */
+.answer-box {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  padding: 10px 15px;
+  background: rgba(0,0,0,0.6); /* Slightly more transparent */
+  border-radius: 6px;
+  font-size: 15px; /* Slightly scaled text */
+  line-height: 1.7;
+  text-align: left;
+  color: #f5f5f5;
+}
+/* ================= MARKDOWN STYLING ================= */
+
+/* Headings */
+.answer-box h1, .answer-box h2, .answer-box h3 {
+  color: #ffcc00;
+  margin-top: 20px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid rgba(255,204,0,0.3);
+  padding-bottom: 5px;
+}
+
+/* Horizontal Rule (The --- line) */
+.answer-box hr {
+  border: 0;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 25px 0;
+}
+
+/* Tables */
+.answer-box table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.answer-box th, .answer-box td {
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 12px 15px;
+  text-align: left;
+}
+
+.answer-box th {
+  background: rgba(255, 204, 0, 0.15);
+  color: #ffcc00;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+}
+
+.answer-box tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.answer-box tr:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Lists */
+.answer-box ul, .answer-box ol {
+  margin-left: 20px;
+  margin-bottom: 15px;
+}
+
+.answer-box li {
+  margin-bottom: 8px;
+}
+
+/* Inline Code/Formulas */
+.answer-box code {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: #00ff88;
+  font-family: monospace;
+}
+/* ================= THE TUNGSTEN SHOP BULB ================= */
+.shop-bulb {
+  position: absolute;
+  top: 25px; /* Moved down slightly to make room for the wire & holder */
+  right: 35px; 
+  width: 30px; /* Bigger width */
+  height: 42px; /* Bigger height */
+  background: rgba(255, 255, 255, 0.12); /* Transparent glass look when OFF */
+  border: 1px solid rgba(255, 255, 255, 0.2); /* Glass edge reflection */
+  border-radius: 40% 40% 50% 50% / 30% 30% 60% 60%; /* Classic teardrop/bulb shape */
+  cursor: pointer;
+  z-index: 6; 
+  transition: all 0.3s ease;
+  box-shadow: inset -3px -5px 10px rgba(0,0,0,0.6); /* 3D glass volume */
+}
+
+/* The Metal Screw Base & Black Wire */
+.shop-bulb::before {
+  content: '';
+  position: absolute;
+  top: -12px; 
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 12px;
+  /* Ridged metal texture for the screw base */
+  background: repeating-linear-gradient(
+    to bottom,
+    #777, #777 2px,
+    #444 2px, #444 4px
+  );
+  border-radius: 3px 3px 0 0;
+  /* The black wire stretching up to the ceiling */
+  box-shadow: 0 -20px 0 -6px #111; 
+}
+
+/* The Tungsten Filament inside the glass */
+.shop-bulb::after {
+  content: '';
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 14px;
+  border: 2px solid #ffcc00; /* Yellow metallic filament */
+  border-bottom: none;
+  border-radius: 50% 50% 0 0; /* Upside-down U shape */
+  opacity: 0.2; /* Very dim when OFF */
+  transition: all 0.3s ease;
+}
+
+/* --- THE 'ON' STATE --- */
+.shop-bulb.bulb-on {
+  background: rgba(255, 245, 180, 0.85); /* Warm yellow glowing glass */
+  border-color: #ffda44;
+  /* Massive yellow outer glow + inner brightness */
+  box-shadow: 0 0 25px #ffaa00, 0 0 50px #ffcc00, inset -2px -5px 15px rgba(255, 204, 0, 0.9);
+}
+
+/* Filament glows bright white/hot when ON */
+.shop-bulb.bulb-on::after {
+  opacity: 1;
+  border-color: #ffffff;
+  box-shadow: inset 0 3px 5px #ffffff;
+  filter: drop-shadow(0 0 4px #ffffff);
+}
+
+/* Lights up the entire shop interior */
+.shop-interior.light-on {
+  background: rgba(255, 204, 0, 0.08); 
+  box-shadow: inset 0 0 30px rgba(255, 204, 0, 0.15);
+}
+
+/* ================= 3D FLOATING BACKGROUND ELEMENTS ================= */
+.bg-3d-elements {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  pointer-events: none; 
+  z-index: 0; 
+  overflow: hidden;
+}
+
+.float-item {
+  position: absolute;
+  filter: drop-shadow(15px 25px 15px rgba(0,0,0,0.6));
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  z-index: 0;
+}
+
+/* AI-Themed Objects */
+.brain { font-size: 100px; top: 15%; left: 5%; filter: drop-shadow(20px 30px 20px rgba(0,0,0,0.8)) blur(2px); animation: floatLarge 8s infinite alternate; }
+.robot { font-size: 80px; bottom: 20%; right: 8%; transform: rotate(-15deg); animation: floatMedium 6s infinite alternate-reverse; }
+.question { font-size: 120px; top: 35%; right: -20px; filter: drop-shadow(15px 25px 15px rgba(0,0,0,0.7)) blur(3px); animation: floatLarge 9s infinite alternate; }
+.gear { font-size: 70px; bottom: 10%; left: 15%; animation: floatSmall 7s infinite alternate; }
+.book { font-size: 60px; top: 25%; left: 35%; opacity: 0.5; filter: drop-shadow(0 0 20px rgba(255,255,255,0.2)) blur(1px); animation: floatSmall 5s infinite alternate-reverse; }
+
+@keyframes floatLarge {
+  0% { transform: translateY(0) rotate(0deg) scale(1); }
+  100% { transform: translateY(-40px) rotate(15deg) scale(1.05); }
+}
+@keyframes floatMedium {
+  0% { transform: translateY(0) rotate(-20deg); }
+  100% { transform: translateY(-30px) rotate(10deg); }
+}
+@keyframes floatSmall {
+  0% { transform: translateY(0) rotate(10deg); }
+  100% { transform: translateY(20px) rotate(-10deg); }
+}
+
+/* ================= BLOCK BUILDING LOADER ================= */
+.block-loader {
+  position: relative;
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 10px;
+}
+
+.block {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  background: linear-gradient(135deg, #ffcc00, #ffaa00);
+  border-radius: 4px;
+  box-shadow: inset 2px 2px 5px rgba(255,255,255,0.4), inset -2px -2px 5px rgba(0,0,0,0.2), 3px 3px 8px rgba(0,0,0,0.5);
+  animation: stackBlocks 2s infinite cubic-bezier(0.2, 0.9, 0.2, 1);
+  opacity: 0;
+}
+
+/* Positioning the 3 blocks in a pyramid */
+.block1 { left: 5px; bottom: 5px; animation-delay: 0s; } /* Bottom Left */
+.block2 { left: 32px; bottom: 5px; animation-delay: 0.3s; } /* Bottom Right */
+.block3 { left: 18px; bottom: 32px; animation-delay: 0.6s; z-index: 2; } /* Top Center */
+
+/* Falling and stacking animation */
+@keyframes stackBlocks {
+  0% { opacity: 0; transform: translateY(-40px) scale(0.8); }
+  15% { opacity: 1; transform: translateY(0) scale(1); }
+  80% { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(20px) scale(0.8); }
+}

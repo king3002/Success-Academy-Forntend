@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Practice Zone | Success Academy</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="Practice_zone.css">
+<link rel="icon" href="image/WEB LOGO.jpg">
+
+</head>
+<body>
+  <div class="bg-3d-elements">
+  <span class="float-item pencil">✏️</span>
+  <span class="float-item pen">🖋️</span>
+  <span class="float-item ruler">📐</span>
+  <span class="float-item book">📚</span>
+  <span class="float-item bulb">💡</span>
+  <span class="float-item target">🎯</span>
+</div>
+
+<div class="loader"><div class="spinner"></div></div>
+
+<nav class="navbar">
+  <div class="logo">Success Academy</div>
+  <div class="hamburger" id="hamburger">
+    <span></span><span></span><span></span>
+  </div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="Dashboard.html">Dashboard</a></li>
+    <li><a href="Notice.html">Notices</a></li>
+    <li><a href="Practice_zone.html" class="active">Practice Zone</a></li>
+    <li><a href="Leaderboard.html">Leaderboard</a></li>
+    <li><a href="Ai_Doubt.html">AI Doubt Solver</a></li>
+    <li><button class="logout-btn" onclick="confirmLogout()">Logout</button></li>
+  </ul>
+</nav>
+<div class="menu-overlay" id="menuOverlay"></div>
+
+<section class="practice-container">
+  <h1 class="page-title">Practice Dashboard</h1>
+  
+  <div class="practice-grid" id="mainPracticeGrid"></div>
+
+  <div id="dynamicContentContainer" class="demo-section hidden"></div>
+
+</section>
+
+<div id="mcqBottomSheet" class="bottom-sheet">
+    <div class="sheet-content">
+        <h3 id="sheetTitle">Result</h3>
+        <p id="sheetExplanation">Explanation goes here...</p>
+        <button class="start-btn" onclick="closeBottomSheet()">Next Question</button>
+    </div>
+</div>
+
+<script src="Practice_zone.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Results | Success Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="Main.css">
+<script src="https://cdn.jsdelivr.net/npm/tsparticles@2/tsparticles.bundle.min.js"></script>
+<link rel="icon" href="image/WEB LOGO.jpg">
+</head>
+
+<body>
+<div class="loader">
+  <div class="spinner"></div>
+</div>
+
+<div class="auth-modal" id="applyModal">
+  <div class="auth-box">
+    <button class="close-btn">&times;</button>
+    <h2>Apply for Admission</h2>
+    <p style="color: #ccc; margin-bottom: 20px; font-size: 14px;">Fill this form to inquire. Our team will contact you for the admission process.</p>
+    <form id="admissionInquiryForm">
+      <input type="text" placeholder="Full Name" required>
+      <input type="tel" placeholder="Mobile Number" required>
+      <select required>
+        <option value="">Select Course</option>
+        <option>MHT-CET</option>
+        <option>JEE</option>
+        <option>NEET</option>
+      </select>
+      <button type="submit" class="glass-btn">Submit Inquiry</button>
+    </form>
+  </div>
+</div>
+
+<div class="auth-modal" id="unlockModal">
+  <div class="auth-box">
+    <button class="close-btn">&times;</button>
+    <h2>Unlock Registration</h2>
+    <p style="color: #ccc; margin-bottom: 20px; font-size: 14px;">Enter the 6-digit numeric code provided during your physical admission.</p>
+    <form id="unlockForm">
+      <input type="text" id="accessCodeInput" placeholder="Enter 6-Digit Code" maxlength="6" required>
+      <button type="submit" class="glass-btn">Verify Access Code</button>
+    </form>
+    <div id="unlockError" style="color: #ff4d4d; margin-top: 10px; display: none; text-align: center;">❌ Invalid Access Code</div>
+  </div>
+</div>
+
+<div class="auth-modal" id="registerModal">
+  <div class="login-box">
+    <button class="close-btn">&times;</button>
+    <h2>Student Registration</h2>
+    <form id="registrationForm" class="registration-form">
+      <input type="text" id="regName" placeholder="Student Name" required>
+      <input type="tel" id="regPhone" placeholder="Mobile Number" required>
+      <input type="email" id="regEmail" placeholder="Email Address" required>
+      <input type="tel" id="regParentPhone" placeholder="Parent Mobile Number" required>
+      <input type="text" id="regSchool" placeholder="School Name" required>
+
+      <label>Standard</label>
+      <select id="regStandard" required>
+        <option value="">Select Standard</option>
+        <option value="11th">11th Standard</option>
+        <option value="12th">12th Standard</option>
+      </select>
+      
+      <label>Group</label>
+      <select  id="regGroup" required>
+        <option value="">Select Group</option>
+        <option>PCM</option>
+        <option>PCB</option>
+        <option>PCMB</option>
+      </select>
+
+      <label>Type</label>
+      <select id="regType" required>
+        <option value="">Select Type</option>
+        <option value="Regular">Regular</option>
+        <option value="Regular+Academy">Regular + Academy</option>
+        <option value="Crash Course">Crash Course</option>
+      </select>
+
+      <label>Select Course</label>
+      <div class="course-options">
+        <label><input type="checkbox" value="MHT-CET"><span>MHT-CET</span></label>
+        <label><input type="checkbox" value="JEE"><span>JEE</span></label>
+        <label><input type="checkbox" value="NEET"><span>NEET</span></label>
+      </div>
+      <button type="submit" class="glass-btn">Register</button>
+    </form>
+  </div>
+</div>
+
+<div class="auth-modal" id="loginModal">
+  <div class="auth-box">
+    <button class="close-btn">&times;</button>
+    <h2>Student Login</h2>
+    <form id="loginForm">
+      <input type="text" placeholder="Registration Number" required>
+      <input type="password" placeholder="Password" required>
+      
+      <div class="remember-box" style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; font-size: 14px; color: #ccc;">
+        <input type="checkbox" id="rememberMe">
+        <label for="rememberMe">Remember Me</label>
+      </div>
+
+      <button type="submit" class="glass-btn">Login</button>
+    </form>
+    <div class="login-success">✅ Login Successful!</div>
+  </div>
+</div>
+
+<div class="auth-modal" id="otpModal">
+  <div class="auth-box">
+    <h2>Verify OTP</h2>
+    <p style="text-align:center; margin-bottom:20px;">Enter the OTP sent to your mobile number</p>
+    <input type="text" id="otpInput" placeholder="Enter 4-digit OTP" maxlength="4">
+    <button class="glass-btn" id="verifyOtpBtn">Verify OTP</button>
+    <div class="otp-error">❌ Incorrect OTP</div>
+  </div>
+</div>
+
+<div class="auth-modal" id="successModal">
+  <div class="auth-box" style="text-align:center;">
+    <div class="checkmark">✔</div>
+    <h2>Registration Successful</h2>
+    <p>Registration done.<br>Check your Email or SMS for<br>Registration No & Password.</p>
+  </div>
+</div>
+
+<div id="particles-js"></div>
+
+<nav class="navbar">
+  <div class="logo">Success Academy</div>
+
+  <div class="hamburger" id="hamburger">
+    <span></span><span></span><span></span>
+  </div>
+
+  <div class="nav-menu" id="navMenu">
+    <div class="nav-links">
+      <a href="Homepage.html">Home</a>
+      <a href="Result-page.html" class="active">Our Result</a>
+    </div>
+
+    <div id="publicButtons" class="auth-group">
+      <button class="btn-primary" id="openApplyModal">Apply for Admission</button>
+      <button class="btn-outline unlock-btn" id="openUnlockModal">Unlock Registration</button>
+    </div>
+
+    <div id="unlockedButtons" class="auth-group" style="display: none;">
+      <button class="btn-primary" id="openRegisterModal">Register Now</button>
+      <button class="btn-outline" id="openLoginModal">Login</button>
+    </div>
+
+    <div id="registeredButtons" class="auth-group" style="display: none;">
+      <button class="btn-outline" id="openLoginOnly">Login</button>
+    </div>
+  </div>
+</nav>
+
+
+<section class="section reveal">
+
+  <h2 class="section-title">Academy Results</h2>
+
+  <div class="glass-panel" style="max-width:900px;">
+
+    <label style="margin-bottom:10px; display:block;">Select Year</label>
+    <select id="yearSelect" class="result-select">
+      <option value="">-- Select Year --</option>
+      <option value="2024">2024</option>
+      <option value="2023">2023</option>
+      <option value="2022">2022</option>
+      <option value="2021">2021</option>
+      <option value="2020">2020</option>
+      <option value="2019">2019</option>
+      <option value="2018">2018</option>
+      <option value="2017">2017</option>
+      <option value="2016">2016</option>
+      <option value="2015">2015</option>
+      <option value="2014">2014</option>
+      <option value="2013">2013</option>
+      <option value="2012">2012</option>
+    </select>
+
+    <div id="resultTableContainer" style="margin-top:30px; display:none;">
+
+      <table class="result-table">
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Student Name</th>
+            <th>Marks</th>
+          </tr>
+        </thead>
+        <tbody id="resultTableBody">
+        </tbody>
+      </table>
+
+      <div style="text-align:center; margin-top:25px;">
+        <a id="downloadLink" class="glass-btn" download>
+          Download Full Result (XML)
+        </a>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<script src="Main.js"></script>
+</body>
+</html>

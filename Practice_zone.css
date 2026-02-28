@@ -1,0 +1,1137 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ================= THEME BACKGROUND ================= */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #0f0f1a;
+  color: white;
+  /* Animated Blueprint/Training Grid */
+  background-image: 
+    linear-gradient(rgba(255, 204, 0, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 204, 0, 0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  background-position: center center;
+  animation: gridMove 20s linear infinite;
+  overflow-x: hidden;
+  position: relative;
+  min-height: 100vh;
+}
+
+@keyframes gridMove {
+  from { background-position: 0 0; }
+  to { background-position: 40px 40px; }
+}
+
+/* ================= 3D FLOATING BACKGROUND ELEMENTS ================= */
+.bg-3d-elements {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  pointer-events: none; /* Allows clicking through them */
+  z-index: 0; /* Keeps them behind your cards */
+  overflow: hidden;
+}
+
+.float-item {
+  position: absolute;
+  filter: drop-shadow(15px 25px 15px rgba(0,0,0,0.6));
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+/* Individual 3D Objects with "Depth of Field" blurring */
+.pencil {
+  font-size: 140px;
+  top: 10%; left: -20px;
+  filter: drop-shadow(20px 30px 20px rgba(0,0,0,0.8)) blur(3px); /* Blurred = closer to camera */
+  animation: floatLarge 8s infinite alternate;
+}
+
+.pen {
+  font-size: 90px;
+  bottom: 15%; right: 5%;
+  transform: rotate(-45deg);
+  animation: floatMedium 6s infinite alternate-reverse;
+}
+
+.ruler {
+  font-size: 110px;
+  top: 40%; right: -30px;
+  filter: drop-shadow(15px 25px 15px rgba(0,0,0,0.7)) blur(2px);
+  animation: floatLarge 9s infinite alternate;
+}
+
+.book {
+  font-size: 70px;
+  bottom: 10%; left: 10%;
+  animation: floatSmall 7s infinite alternate;
+}
+
+.bulb {
+  font-size: 60px;
+  top: 20%; left: 30%;
+  opacity: 0.6; /* Further back */
+  filter: drop-shadow(0 0 20px rgba(255,204,0,0.4)) blur(1px);
+  animation: floatSmall 5s infinite alternate-reverse;
+}
+
+.target {
+  font-size: 80px;
+  top: 10%; right: 25%;
+  opacity: 0.5;
+  animation: floatMedium 10s infinite alternate;
+}
+
+/* Animations for floating and rotating */
+@keyframes floatLarge {
+  0% { transform: translateY(0) rotate(0deg) scale(1); }
+  100% { transform: translateY(-40px) rotate(15deg) scale(1.05); }
+}
+@keyframes floatMedium {
+  0% { transform: translateY(0) rotate(-45deg); }
+  100% { transform: translateY(-30px) rotate(-25deg); }
+}
+@keyframes floatSmall {
+  0% { transform: translateY(0) rotate(10deg); }
+  100% { transform: translateY(20px) rotate(-10deg); }
+}
+
+/* ================= NAVBAR ================= */
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding: 20px 8%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(18, 18, 37, 0.8);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  z-index: 3000;
+}
+
+.logo {
+  font-size: 22px;
+  font-weight: 700;
+  color: #ffcc00;
+  text-shadow: 0 0 10px rgba(255, 204, 0, 0.3);
+}
+
+.nav-links { display: flex; gap: 30px; list-style: none; align-items: center; }
+.nav-links li { position: relative; }
+.nav-links li a {
+  text-decoration: none;
+  color: white;
+  font-weight: 500;
+  transition: 0.3s;
+  position: relative;
+}
+.nav-links li a::after {
+  content: ""; position: absolute; left: 0; bottom: -6px;
+  width: 0%; height: 2px; background: #ffcc00; transition: 0.4s;
+  box-shadow: 0 0 8px #ffcc00;
+}
+.nav-links li a:hover::after { width: 100%; }
+.nav-links li a:hover, .nav-links li a.active { color: #ffcc00; text-shadow: 0 0 8px rgba(255,204,0,0.4); }
+
+.logout-btn {
+  background: linear-gradient(90deg, #ff4d4d, #ff1a1a);
+  border: none; padding: 8px 18px; border-radius: 8px;
+  color: white; font-weight: 500; cursor: pointer; transition: 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+}
+.logout-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255,0,0,0.4); }
+
+/* Hamburger & Overlay */
+.hamburger { display: none; flex-direction: column; gap: 6px; cursor: pointer; z-index: 3500; }
+.hamburger span { width: 26px; height: 3px; background: #ffffff; border-radius: 3px; transition: 0.4s ease; }
+.hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
+.hamburger.active span:nth-child(2) { opacity: 0; }
+.hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(6px,-6px); }
+
+.menu-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.55); backdrop-filter: blur(6px);
+  opacity: 0; pointer-events: none; transition: opacity 0.3s ease; z-index: 2000;
+}
+.menu-overlay.active { opacity: 1; pointer-events: auto; }
+
+/* Mobile Nav */
+@media(max-width:768px){
+  .hamburger{ display:flex; }
+  .nav-links{
+    position:fixed; top:0; right:-100%; height:100vh; width:320px;
+    background:linear-gradient(180deg,#121225,#0f0f1a);
+    flex-direction:column; justify-content:center; align-items:flex-start;
+    padding:0 50px; gap:35px; transition:0.4s cubic-bezier(.77,0,.18,1);
+    border-left:1px solid rgba(255,255,255,0.1); z-index:2500;
+  }
+  .nav-links.active{ right:0; }
+  .nav-links li{ width:100%; }
+  .nav-links a{ font-size:18px; }
+  .logout-btn{ width:100%; padding:12px 0; border-radius:12px; text-align:center; }
+}
+
+/* ================= PRACTICE DASHBOARD (MAIN CARDS) ================= */
+.practice-container {
+  margin-top: 100px;
+  padding: 60px 8%;
+  position: relative;
+  z-index: 10; /* Ensures cards are above the floating 3D emojis */
+}
+
+.page-title {
+  font-size: 36px;
+  margin-bottom: 50px;
+  color: #ffcc00;
+  text-shadow: 0 0 15px rgba(255, 204, 0, 0.4);
+  position: relative;
+  display: inline-block;
+}
+
+.practice-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+}
+
+/* 3D Floating Cards */
+@keyframes floatCard {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.practice-card {
+  background: linear-gradient(145deg, rgba(255,255,255,0.05), rgba(0,0,0,0.4));
+  padding: 40px 30px;
+  border-radius: 20px;
+  cursor: pointer;
+  border: 1px solid rgba(255, 204, 0, 0.2);
+  backdrop-filter: blur(15px);
+  position: relative;
+  overflow: hidden;
+  animation: floatCard 6s ease-in-out infinite;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Stagger floating animation */
+.practice-card:nth-child(1) { animation-delay: 0s; }
+.practice-card:nth-child(2) { animation-delay: 0.2s; }
+.practice-card:nth-child(3) { animation-delay: 0.4s; }
+
+/* Internal Glow */
+.practice-card::before {
+  content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+  background: radial-gradient(circle, rgba(255,204,0,0.15) 0%, transparent 60%);
+  opacity: 0; transition: opacity 0.5s; z-index: 0; pointer-events: none;
+}
+.practice-card:hover::before { opacity: 1; }
+
+.practice-card * { position: relative; z-index: 1; } /* Keep text above glow */
+
+.practice-card h2 { color: #fff; margin-bottom: 15px; font-size: 22px; transition: 0.3s; }
+.practice-card p { color: #aaa; font-size: 14px; line-height: 1.6; }
+
+.practice-card:hover {
+  transform: translateY(-15px) scale(1.03);
+  border-color: #ffcc00;
+  box-shadow: 0 20px 40px rgba(255, 204, 0, 0.2), inset 0 0 15px rgba(255, 204, 0, 0.1);
+}
+.practice-card:hover h2 { color: #ffcc00; }
+
+/* ================= LOCKED CARD STYLING (THE BIG LOCK) ================= */
+.practice-card.locked {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    opacity: 0.85;
+    filter: none; 
+    border: 2px dashed rgba(255, 77, 77, 0.4);
+    background: linear-gradient(145deg, rgba(255,77,77,0.05), rgba(0,0,0,0.5));
+    cursor: not-allowed;
+    animation: none; 
+    /* pointer-events: none; <-- REMOVE THIS LINE */
+    position: relative; 
+    overflow: visible !important; 
+}
+
+/* The Lock Icon */
+.practice-card.locked .lock-icon {
+    font-size: 65px;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 0 15px rgba(255, 77, 77, 0.6));
+    animation: pulseLock 2.5s infinite;
+}
+
+/* Subtle glowing pulse for the lock */
+@keyframes pulseLock {
+    0% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(255, 77, 77, 0.4)); }
+    50% { transform: scale(1.05); filter: drop-shadow(0 0 25px rgba(255, 77, 77, 0.8)); }
+    100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(255, 77, 77, 0.4)); }
+}
+
+/* Locked Card Text Styling */
+.practice-card.locked h2 {
+    color: #ff4d4d;
+    font-size: 22px;
+    text-shadow: 0 0 10px rgba(255, 77, 77, 0.4);
+    margin-bottom: 5px;
+}
+
+.practice-card.locked p {
+    color: #ffaaaa;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+@media(max-width:900px){ .practice-grid { grid-template-columns: 1fr; } }
+
+/* ================= LEVEL RENDER BOX (DEMO SECTION) ================= */
+.demo-section {
+  margin-top: 80px;
+  padding-top: 40px;
+  border-top: 1px dashed rgba(255, 204, 0, 0.3);
+}
+
+.demo-box {
+  background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(0,0,0,0.3));
+  padding: 30px;
+  border-radius: 15px;
+  margin-top: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+}
+
+/* ================= THEME BUTTONS (START & ACTION) ================= */
+.start-btn {
+  margin-top: 20px;
+  padding: 12px 28px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 15px;
+  font-family: 'Poppins', sans-serif;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Base state for buttons (Inactive/Outline) */
+.start-btn.inactive-btn {
+  background: rgba(255, 204, 0, 0.05);
+  color: #ffcc00;
+  border: 1px solid rgba(255, 204, 0, 0.4);
+}
+.start-btn.inactive-btn:hover {
+  background: rgba(255, 204, 0, 0.15);
+  box-shadow: 0 0 15px rgba(255, 204, 0, 0.3);
+  transform: translateY(-3px);
+}
+
+/* Active State (Solid & Glowing) */
+.start-btn.active-btn {
+  background: linear-gradient(45deg, #ffcc00, #ffaa00) !important;
+  color: #000 !important;
+  border: none !important;
+  box-shadow: 0 8px 20px rgba(255, 204, 0, 0.4);
+  transform: translateY(-2px);
+}
+
+/* Secondary Action Button (PYQs, Read Notes) */
+.action-btn {
+  background: rgba(255,255,255,0.05);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.15);
+  padding: 10px 22px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Shiny Sweep Effect on Action Hover */
+.action-btn::before {
+  content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transform: skewX(-20deg); transition: 0s;
+}
+.action-btn:hover::before { left: 150%; transition: 0.6s ease-in-out; }
+
+.action-btn:hover {
+  background: #ffcc00;
+  color: #000;
+  border-color: #ffcc00;
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(255, 204, 0, 0.3);
+}
+
+/* ================= DYNAMIC ANIMATIONS (BOUNCY FADE) ================= */
+@keyframes popIn {
+  0% { opacity: 0; transform: scale(0.9) translateY(30px); }
+  70% { transform: scale(1.02) translateY(-5px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.fade-in {
+  animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+.hidden { display: none; }
+
+/* ================= BOTTOM SHEET (MCQ EXPLANATION) ================= */
+.bottom-sheet {
+  position: fixed; bottom: -100%; left: 0; width: 100%;
+  background: rgba(15, 15, 26, 0.95);
+  border-top: 2px solid #ffcc00;
+  box-shadow: 0 -10px 50px rgba(0,0,0,0.8);
+  backdrop-filter: blur(15px);
+  z-index: 4000;
+  transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  padding: 40px;
+  border-radius: 25px 25px 0 0;
+}
+.bottom-sheet.active { bottom: 0; }
+.sheet-content.correct h3 { color: #00ff88; text-shadow: 0 0 10px rgba(0,255,136,0.3); }
+.sheet-content.wrong h3 { color: #ff4d4d; text-shadow: 0 0 10px rgba(255,77,77,0.3); }
+
+/* ================= STRICT TEST OVERLAY (CYBERPUNK EXAM) ================= */
+.strict-overlay {
+  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+  background: #050508; /* Darker than normal */
+  z-index: 9999; padding: 30px; display: flex; flex-direction: column;
+}
+.strict-overlay.hidden { display: none; }
+.test-header {
+  display: flex; justify-content: space-between;
+  border-bottom: 1px solid rgba(255,77,77,0.3); /* Red warning tint */
+  padding-bottom: 15px; margin-bottom: 20px;
+}
+#proctorCamera {
+  position: absolute; top: 20px; right: 20px; width: 150px; height: 100px;
+  background: #000; border: 2px solid #ff4d4d; border-radius: 10px;
+  object-fit: cover; box-shadow: 0 0 15px rgba(255,77,77,0.4);
+}
+.test-content {
+  flex: 1; background: rgba(255,255,255,0.02); border-radius: 15px;
+  padding: 30px; overflow-y: auto; border: 1px solid rgba(255,255,255,0.05);
+}
+
+/* iframe protection for PDFs */
+.protected-pdf {
+  width: 100%; height: 600px; border: none; pointer-events: none;
+}
+
+/* ================= OPEN BOOK CARD (REALISTIC) ================= */
+.practice-card.open-book-card {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    min-height: 160px;
+    animation: floatCard 6s ease-in-out infinite;
+    overflow: visible; /* Prevent clipping 3D effects */
+}
+
+.open-book-card.is-open {
+    animation: none; 
+}
+
+.open-book-container {
+    width: 100%; height: 100%; display: flex;
+    border-radius: 8px;
+    position: relative; perspective: 1200px;
+    background: transparent;
+}
+
+/* The Center Binding Crease */
+.open-book-container::after {
+    content: ''; position: absolute; left: calc(50% - 3px); top: 0; bottom: 0; width: 6px;
+    background: linear-gradient(to right, rgba(0,0,0,0.4), rgba(0,0,0,0.1), rgba(0,0,0,0.4));
+    box-shadow: inset 0 0 5px rgba(0,0,0,0.5);
+    z-index: 10;
+}
+
+/* Static Left Page (With Paper Thickness & Gradient) */
+.book-left-page {
+    width: 50%; height: 100%; 
+    padding: 20px; display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(to right, #f8f9fa 80%, #e0e5e7 95%, #b0b5b9 100%);
+    border-radius: 8px 0 0 8px;
+    /* This creates the illusion of stacked pages underneath */
+    box-shadow: -2px 2px 0 #ddd, -4px 4px 0 #ccc, -6px 6px 10px rgba(0,0,0,0.4);
+}
+.book-left-page h3 { font-size: 18px; color: #888; transform: rotate(-10deg); opacity: 0.4; }
+
+/* Static Right Page Base (Revealed when turned) */
+.book-right-page-base {
+    width: 50%; height: 100%; padding: 20px; display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(to left, #f8f9fa 80%, #e0e5e7 95%, #b0b5b9 100%);
+    border-radius: 0 8px 8px 0;
+    box-shadow: 2px 2px 0 #ddd, 4px 4px 0 #ccc, 6px 6px 10px rgba(0,0,0,0.4);
+}
+.book-right-page-base h3 { color: #555; font-size: 14px; font-weight: 600; text-align: center; }
+
+/* ================= THE PAGE THAT FLIPS (COVER) ================= */
+.book-right-page-flip {
+    position: absolute; right: 0; top: 0; width: 50%; height: 100%;
+    transform-origin: left center;
+    /* Added a highly satisfying, springy bounce to the page turn and peek */
+    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform-style: preserve-3d;
+    z-index: 15;
+}
+
+/* Front of the flipping page (Theme Cover) */
+.flip-front {
+    position: absolute; inset: 0; backface-visibility: hidden; padding: 30px 15px;
+    background: linear-gradient(145deg, #ffffff, #f4f4f4);
+    border-radius: 0 8px 8px 0;
+    border: 1px solid rgba(255, 204, 0, 0.3); border-left: none;
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.6);
+    transition: all 0.4s ease; /* Smooth glow transition */
+}
+
+.flip-front h2 { 
+    color: #ffcc00; font-size: 18px; margin-bottom: 8px; 
+    transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+.flip-front p { color: #aaa; font-size: 12px; line-height: 1.4; }
+
+/* ================= 🌟 NEW: THE "PAGE PEEK" HOVER ANIMATION ================= */
+
+/* 1. When hovering the book BEFORE clicking, the cover physically lifts/peeks open */
+.open-book-card:not(.is-open):hover .book-right-page-flip {
+    transform: rotateY(-20deg) scale(1.02); /* Lifts the page 20 degrees */
+}
+
+/* 2. Drops a deeper 3D shadow and glows when peeking */
+.open-book-card:not(.is-open):hover .flip-front {
+    border-color: #ffcc00; 
+    box-shadow: 15px 15px 25px rgba(0, 0, 0, 0.7), inset 0 0 15px rgba(255, 204, 0, 0.15);
+}
+
+/* 3. The text pulses with a golden glow to invite the click */
+.open-book-card:not(.is-open):hover .flip-front h2 {
+    color: #ffaa00;
+    text-shadow: 0 0 15px rgba(255, 204, 0, 0.6);
+}
+
+/* ========================================================================= */
+
+/* Back of the flipping page (Blank White Page) */
+.flip-back {
+    position: absolute; inset: 0; backface-visibility: hidden;
+    background: linear-gradient(to right, #b0b5b9 0%, #e0e5e7 5%, #f8f9fa 20%);
+    border-radius: 8px 0 0 8px;
+    transform: rotateY(180deg);
+    box-shadow: inset -5px 0 10px rgba(0,0,0,0.1);
+}
+
+/* Page Turn Trigger (When Clicked) */
+.open-book-card.is-open .book-right-page-flip {
+    transform: rotateY(-180deg);
+}
+
+
+/* ================= FLYING KEY ANIMATION ================= */
+.practice-card.locked {
+    position: relative; 
+    overflow: visible !important; /* Forces key to break out of the card */
+}
+
+.key-animation {
+    position: absolute; top: 20px; left: 50%; font-size: 35px;
+    opacity: 0; pointer-events: none; z-index: 9999;
+    filter: drop-shadow(0 0 10px #ffcc00);
+    transform: translate(-50%, 0); /* Base position */
+}
+
+.key-animation.is-flying {
+    animation: flyToMCQ 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+/* Dynamic Animation using JS-calculated distances */
+@keyframes flyToMCQ {
+    0% { 
+        opacity: 0; 
+        transform: translate(-50%, 0) scale(0.5); 
+    }
+    20% { 
+        opacity: 1; 
+        transform: translate(-50%, -40px) scale(1.3); /* Pops up slightly */
+    }
+    80% { 
+        opacity: 1; 
+        /* Flies exactly to the center of the MCQ card */
+        transform: translate(calc(-50% + var(--fly-x)), calc(-40px + var(--fly-y))) scale(1) rotate(-45deg); 
+    }
+    100% { 
+        opacity: 0; 
+        /* Shrinks and disappears inside the MCQ card */
+        transform: translate(calc(-50% + var(--fly-x)), calc(-40px + var(--fly-y))) scale(0) rotate(-90deg); 
+    }
+}
+
+/* ================= MCQ CARD: CLIPBOARD & DENSE ANIMATION ================= */
+
+/* --- 1. Clipboard Base & Clip Styling --- */
+#mcqCard.clipboard-card {
+    background: linear-gradient(145deg, #3a2a1a, #1a120c); /* Dark Wood Board */
+    border: 2px solid #5a422d;
+    padding: 20px 15px 15px 15px; /* Space at top for the clip */
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+.clipboard-clip {
+    position: absolute;
+    top: -12px; left: 50%; transform: translateX(-50%);
+    width: 70px; height: 30px;
+    background: linear-gradient(to bottom, #e0e0e0, #888);
+    border-radius: 6px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.8), inset 0 2px 2px #fff;
+    z-index: 5;
+}
+
+.clipboard-clip::after {
+    content: ''; position: absolute;
+    top: 6px; left: 50%; transform: translateX(-50%);
+    width: 45px; height: 12px;
+    border: 2px solid #444; border-radius: 4px;
+}
+
+/* --- 2. The Paper & Content Styling --- */
+.clipboard-paper {
+    /* NEW: Graph paper grid overlaid on the warm off-white paper */
+    background: 
+        linear-gradient(rgba(0, 0, 0, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.06) 1px, transparent 1px),
+        linear-gradient(to bottom, #fdfbf7, #f4f0e6); 
+    background-size: 20px 20px, 20px 20px, 100% 100%; /* Size of the grid squares */
+    background-position: center top;
+    
+    width: 100%; 
+    height: 100%;
+    border-radius: 5px;
+    padding: 35px 20px 20px 20px;
+    position: relative;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.05), 2px 2px 10px rgba(0,0,0,0.4);
+    overflow: hidden; /* Keeps falling particles inside the paper */
+    text-align: center;
+}
+
+/* Adjust text for the light paper background */
+.clipboard-paper .mcq-title { color: #222; text-shadow: none; margin-bottom: 8px; z-index: 2; position: relative;}
+.clipboard-paper .mcq-desc { color: #666; font-weight: 500; z-index: 2; position: relative;}
+
+/* --- 3. OMR Bubbles Setup (Hover Only) --- */
+.omr-container {
+    display: flex; justify-content: center; gap: 12px; margin-top: 15px;
+    opacity: 0; transform: translateY(15px);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative; z-index: 2;
+}
+
+.omr-bubble {
+    width: 34px; height: 34px; 
+    border: 2px solid #ccc; /* Darker border for white paper */
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: bold; color: #888; background: #fff;
+    transition: all 0.3s ease; box-shadow: inset 2px 2px 5px rgba(0,0,0,0.05);
+}
+
+#mcqCard:hover .omr-container { opacity: 1; transform: translateY(0); }
+
+/* --- 4. Click Effects (The Board presses down) --- */
+#mcqCard.is-clicked {
+    transform: translateY(10px) scale(0.98);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.6);
+}
+
+#mcqCard.is-clicked .correct-bubble { animation: fillCorrect 0.3s forwards; }
+
+@keyframes fillCorrect {
+    0% { background: #fff; border-color: #ccc; transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { background: #00ff88; border-color: #00aa55; color: #000; transform: scale(1); box-shadow: 0 0 15px rgba(0, 255, 136, 0.6); }
+}
+
+/* --- 5. DENSE Particle Gravity Setup --- */
+.particle-burst {
+    position: absolute; top: 60%; left: 50%;
+    width: 1px; height: 1px;
+    pointer-events: none; z-index: 10;
+}
+
+.particle {
+    position: absolute; opacity: 0;
+    font-size: 22px; font-weight: bold; color: #00cc66; /* Slightly darker green for light paper */
+    text-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    left: -10px; top: -10px;
+}
+
+/* CLICK: Trigger all 8 particles in different directions */
+#mcqCard.is-clicked .p1 { animation: scatter1 0.8s ease-in-out forwards; animation-delay: 0.0s; }
+#mcqCard.is-clicked .p2 { animation: scatter2 0.8s ease-in-out forwards; animation-delay: 0.05s; }
+#mcqCard.is-clicked .p3 { animation: scatter3 0.8s ease-in-out forwards; animation-delay: 0.1s; }
+#mcqCard.is-clicked .p4 { animation: scatter4 0.8s ease-in-out forwards; animation-delay: 0.02s; }
+#mcqCard.is-clicked .p5 { animation: scatter5 0.8s ease-in-out forwards; animation-delay: 0.08s; }
+#mcqCard.is-clicked .p6 { animation: scatter6 0.8s ease-in-out forwards; animation-delay: 0.12s; }
+#mcqCard.is-clicked .p7 { animation: scatter7 0.8s ease-in-out forwards; animation-delay: 0.04s; }
+#mcqCard.is-clicked .p8 { animation: scatter8 0.8s ease-in-out forwards; animation-delay: 0.06s; }
+
+/* 8 unique paths: Explode outwards (X, Y), then fall down (+Y) */
+@keyframes scatter1 { 0% { opacity:0; transform:translate(0,0) scale(0.5); } 30% { opacity:1; transform:translate(-90px, -90px) scale(1.3) rotate(-15deg); } 80% { opacity:1; transform:translate(-100px, 40px) scale(1); } 100% { opacity:0; transform:translate(-100px, 90px) scale(0.8); } }
+@keyframes scatter2 { 0% { opacity:0; transform:translate(0,0) scale(0.5); } 30% { opacity:1; transform:translate(-40px, -120px) scale(1.4) rotate(10deg); } 80% { opacity:1; transform:translate(-45px, 50px) scale(1); } 100% { opacity:0; transform:translate(-45px, 100px) scale(0.8); } }
+@keyframes scatter3 { 0% { opacity:0; transform:translate(0,0) scale(0.5); } 30% { opacity:1; transform:translate(30px, -130px) scale(1.3) rotate(-20deg); } 80% { opacity:1; transform:translate(35px, 45px) scale(1); } 100% { opacity:0; transform:translate(35px, 95px) scale(0.8); } }
+@keyframes scatter4 { 0% { opacity:0; transform:translate(0,0) scale(0.5); } 30% { opacity:1; transform:translate(80px, -90px) scale(1.5) rotate(15deg); } 80% { opacity:1; transform:translate(90px, 55px) scale(1); } 100% { opacity:0; transform:translate(90px, 105px) scale(0.8); } }
+@keyframes scatter5 { 0% { opacity:0; transform:translate(0,0) scale(0.5); } 30% { opacity:1; transform:translate(-130px, -40px) scale(1.2) rotate(-30deg); } 80% { opacity:1; transform:translate(-140px, 60px) scale(1); } 100% { opacity:0; transform:translate(-140px, 110px) scale(0.8); } }
+@keyframes scatter6 { 0% { opacity:0; transform:translate(0,0) scale(0.5); } 30% { opacity:1; transform:translate(120px, -50px) scale(1.4) rotate(25deg); } 80% { opacity:1; transform:translate(130px, 70px) scale(1); } 100% { opacity:0; transform:translate(130px, 120px) scale(0.8); } }
+@keyframes scatter7 { 0% { opacity:0; transform:translate(0,0) scale(0.5); } 30% { opacity:1; transform:translate(-60px, -10px) scale(1.3) rotate(10deg); } 80% { opacity:1; transform:translate(-70px, 80px) scale(1); } 100% { opacity:0; transform:translate(-70px, 130px) scale(0.8); } }
+@keyframes scatter8 { 0% { opacity:0; transform:translate(0,0) scale(0.5); } 30% { opacity:1; transform:translate(60px, -20px) scale(1.2) rotate(-10deg); } 80% { opacity:1; transform:translate(70px, 90px) scale(1); } 100% { opacity:0; transform:translate(70px, 140px) scale(0.8); } }
+
+/* ================= DAILY CHALLENGE: HEAVY STEEL SAFE ================= */
+
+/* --- 1. Override Card Transparency --- */
+.practice-card.heavy-safe-card {
+    background: #5c636a !important; /* Solid Matte Grey */
+    backdrop-filter: none !important; /* Removes the glass effect */
+    border: none;
+    padding: 15px;
+    box-shadow: 10px 10px 25px rgba(0,0,0,0.8), inset 2px 2px 5px rgba(255,255,255,0.2) !important;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    overflow: visible !important;
+}
+
+/* --- 2. Safe Outer Frame & Inner Door --- */
+.safe-outer-frame {
+    width: 100%; height: 200px;
+    background: linear-gradient(135deg, #828a92, #6a7178);
+    border-radius: 8px;
+    padding: 15px;
+    /* Creates the thick, bulky outer bevel */
+    box-shadow: inset 8px 8px 15px rgba(255,255,255,0.3), inset -8px -8px 15px rgba(0,0,0,0.5), 0 5px 15px rgba(0,0,0,0.5);
+    margin-bottom: 12px;
+}
+
+.safe-inner-door {
+    width: 100%; height: 100%;
+    background: #6a7178;
+    border: 3px solid #333; /* Dark gap between frame and door */
+    border-radius: 4px;
+    box-shadow: -4px -4px 10px rgba(0,0,0,0.6), inset 2px 2px 5px rgba(255,255,255,0.2);
+    padding: 12px;
+}
+
+/* White Pinstripe Outline on Door */
+.safe-pinstripe {
+    width: 100%; height: 100%;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 20px;
+    position: relative;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+}
+
+/* --- 3. Door Details (Brass Accents) --- */
+.safe-nameplate {
+    position: absolute; top: 12px;
+    width: 50px; height: 12px;
+    background: linear-gradient(to right, #9e844a, #d6c08d, #9e844a); /* Brass */
+    border-radius: 2px; box-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+}
+
+.safe-center-mechanism {
+    display: flex; align-items: center; justify-content: center; gap: 15px;
+    width: 100%;
+}
+
+.safe-side-dial {
+    width: 25px; height: 25px;
+    background: radial-gradient(circle, #d6c08d, #8a7342); /* Brass */
+    border-radius: 50%; border: 1px solid #4a3b1a;
+    box-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+}
+
+/* --- 4. The 3-Prong Handle --- */
+.safe-handle {
+    position: relative; width: 60px; height: 60px;
+    display: flex; justify-content: center; align-items: center;
+}
+
+.handle-center {
+    width: 20px; height: 20px;
+    background: radial-gradient(circle, #e0e0e0, #888); /* Silver */
+    border-radius: 50%; z-index: 2; box-shadow: 2px 2px 5px rgba(0,0,0,0.8);
+}
+
+.prong {
+    position: absolute; width: 6px; height: 32px;
+    background: linear-gradient(to right, #bbb, #eee, #999);
+    border-radius: 3px;
+    transform-origin: bottom center; bottom: 50%;
+    box-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+}
+.prong-1 { transform: rotate(0deg) translateY(-3px); }
+.prong-2 { transform: rotate(120deg) translateY(-3px); }
+.prong-3 { transform: rotate(240deg) translateY(-3px); }
+
+/* Bottom Keyhole */
+.safe-bottom-keyhole {
+    position: absolute; bottom: 15px;
+    width: 22px; height: 22px;
+    background: radial-gradient(circle, #d6c08d, #8a7342);
+    border-radius: 50%; display: flex; justify-content: center; align-items: center;
+    box-shadow: 1px 1px 4px rgba(0,0,0,0.6);
+}
+
+.keyhole-slot {
+    width: 3px; height: 10px; background: #0a0a0a; border-radius: 1px;
+}
+
+/* --- 5. Text Overlay & Click Animation --- */
+.safe-text-plate {
+    background: rgba(0, 0, 0, 0.3); padding: 8px 15px;
+    border-radius: 6px; width: 100%; text-align: center;
+}
+
+.heavy-safe-card .locked-title { color: #ff4d4d; font-size: 18px; margin-bottom: 2px; text-shadow: none; }
+.heavy-safe-card .locked-subtext { color: #ffaaaa; font-size: 13px; font-weight: normal; }
+
+/* Handle turns and hits a locked stopping point */
+.safe-handle.is-turning {
+    animation: handleTug 0.4s ease-in-out forwards;
+}
+
+@keyframes handleTug {
+    0% { transform: rotate(0deg); }
+    40% { transform: rotate(18deg); } /* Turns smoothly right */
+    60% { transform: rotate(18deg); } /* Hits the lock */
+    100% { transform: rotate(0deg); } /* Springs back */
+}
+
+/* ================= DAILY CHALLENGE: UNLOCKED (RED ARENA - SLOW CLASH) ================= */
+.practice-card.arena-card {
+    background: #0d0d0d;
+    border: 2px solid #ff1a1a; /* Solid Red Border */
+    box-shadow: 0 0 15px rgba(255, 26, 26, 0.5), inset 0 0 10px rgba(255, 26, 26, 0.2);
+    position: relative;
+    padding: 0; 
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    text-align: center;
+    overflow: hidden; 
+    transition: all 0.3s ease;
+    cursor: pointer;
+    /* Ensure swords can fly outside the box during the animation */
+    overflow: visible !important; 
+}
+
+/* Hover: Red glow intensifies */
+.practice-card.arena-card:hover {
+    box-shadow: 0 0 40px rgba(255, 26, 26, 0.9), inset 0 0 30px rgba(255, 26, 26, 0.5);
+    transform: translateY(-5px);
+    border-color: #ff4d4d;
+}
+
+/* --- 1. Realistic Moving Flame Background (Hover Only) --- */
+.arena-bg-flames {
+    position: absolute; inset: 0;
+    /* Complex gradient for a realistic fire core look */
+    background: radial-gradient(circle at 50% 70%, rgba(255, 200, 0, 0.4) 10%, rgba(255, 77, 0, 0.6) 30%, transparent 70%);
+    opacity: 0; /* Hidden by default */
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    z-index: 0;
+    filter: blur(10px);
+    transform: scale(0.8);
+}
+
+.practice-card.arena-card:hover .arena-bg-flames {
+    opacity: 1;
+    transform: scale(1.1);
+    animation: flamePulse 2s infinite alternate;
+}
+
+@keyframes flamePulse {
+    0% { filter: blur(10px) brightness(1); transform: scale(1.1) translateY(0); }
+    100% { filter: blur(15px) brightness(1.3); transform: scale(1.15) translateY(-5px); }
+}
+
+/* --- 2. Inner Content & Hiding on Click --- */
+.arena-card .daily-content {
+    position: relative; z-index: 2; padding: 30px 20px; width: 100%;
+    transition: opacity 0.3s ease-out; /* Smooth fade out */
+}
+
+/* CRITICAL: Hides text when clicked */
+.arena-card.is-clashing .daily-content {
+    opacity: 0; 
+}
+
+/* Typography */
+.arena-card .daily-title { color: #fff; font-size: 24px; margin-bottom: 5px; text-shadow: 0 0 10px rgba(255, 0, 0, 0.4); }
+.arena-card .daily-subtext { color: #aaa; font-size: 13px; margin-bottom: 20px; }
+
+/* Red Live Dot */
+.arena-card .live-indicator {
+    position: absolute; top: 15px; right: 15px;
+    color: #ff1a1a; font-size: 11px; font-weight: 700;
+    display: flex; align-items: center; gap: 6px;
+    text-shadow: 0 0 8px rgba(255, 26, 26, 0.6);
+}
+.arena-card .pulse-dot {
+    width: 8px; height: 8px; background: #ff1a1a; border-radius: 50%;
+    box-shadow: 0 0 10px #ff1a1a;
+    animation: livePulseRed 1s infinite alternate;
+}
+@keyframes livePulseRed {
+    0% { transform: scale(1); box-shadow: 0 0 5px #ff1a1a; }
+    100% { transform: scale(1.5); box-shadow: 0 0 15px #ff1a1a; }
+}
+
+/* --- 3. SLOW Motion Flying Swords Animation --- */
+.sword {
+    position: absolute; font-size: 60px; opacity: 0; z-index: 10;
+    top: 40%; pointer-events: none;
+    filter: drop-shadow(0 0 15px rgba(255, 77, 0, 0.8)); /* Fiery glow on swords */
+}
+
+.sword-left { left: -100px; transform: rotate(45deg); }
+.sword-right { right: -100px; transform: rotate(-45deg) scaleX(-1); }
+
+/* Flash of light when they clash */
+.arena-card.is-clashing::after {
+    content: ''; position: absolute; inset: -50%; /* Oversized flash */
+    background: radial-gradient(circle, #fff 10%, transparent 60%); 
+    z-index: 5; opacity: 0; pointer-events: none;
+    animation: clashFlashSlow 2.0s ease-out forwards;
+}
+
+/* Triggered via JS .is-clashing class - Duration increased to 2.0s */
+.arena-card.is-clashing .sword-left { animation: strikeLeftSlow 2.0s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+.arena-card.is-clashing .sword-right { animation: strikeRightSlow 2.0s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+
+/* Slow Motion Keyframes */
+@keyframes strikeLeftSlow {
+    0% { left: -120px; opacity: 0; transform: rotate(45deg) scale(0.8); }
+    30% { opacity: 1; } /* Fade in quickly */
+    50% { left: 42%; transform: rotate(15deg) scale(1.3); } /* The Slow Clash Point */
+    65% { left: 42%; transform: rotate(15deg) scale(1.3); } /* Hang there briefly */
+    100% { left: 45%; opacity: 0; transform: rotate(60deg) translateY(150px) scale(0.5); } /* Slow fall */
+}
+
+@keyframes strikeRightSlow {
+    0% { right: -120px; opacity: 0; transform: rotate(-45deg) scaleX(-1) scale(0.8); }
+    30% { opacity: 1; }
+    50% { right: 42%; transform: rotate(-15deg) scaleX(-1) scale(1.3); } /* The Slow Clash Point */
+    65% { right: 42%; transform: rotate(-15deg) scaleX(-1) scale(1.3); } /* Hang there briefly */
+    100% { right: 45%; opacity: 0; transform: rotate(-60deg) translateY(150px) scaleX(-1) scale(0.5); } /* Slow fall */
+}
+
+@keyframes clashFlashSlow {
+    0%, 45% { opacity: 0; }
+    50% { opacity: 1; transform: scale(1.2); } /* Bright flash at impact */
+    100% { opacity: 0; transform: scale(0.8); }
+}
+/* ================= DAILY CHALLENGE: UNLOCKING ANIMATION (GOLDEN TICKET) ================= */
+
+.split-frame {
+    position: relative;
+    overflow: hidden; /* Keeps the sliding doors inside the frame */
+    display: flex; justify-content: center; align-items: center;
+}
+
+/* The Doors */
+.safe-door {
+    position: absolute; top: 0; bottom: 0; width: 50%;
+    background: #6a7178;
+    border: 3px solid #333;
+    z-index: 2;
+    transition: transform 1s cubic-bezier(0.645, 0.045, 0.355, 1) 0.6s; /* Waits 0.6s for handle to spin */
+    box-shadow: inset 2px 2px 5px rgba(255,255,255,0.2);
+}
+
+.left-door { left: 0; border-right: 1px solid #222; border-radius: 4px 0 0 4px; }
+.right-door { right: 0; border-left: 1px solid #444; border-radius: 0 4px 4px 0; }
+
+/* The Center Handle */
+.split-handle-container {
+    position: absolute; left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 3;
+    transition: opacity 0.3s ease 0.5s; /* Fades out right before doors slide */
+}
+
+/* The Golden Ticket */
+.golden-ticket {
+    position: absolute; inset: 15px;
+    background: linear-gradient(135deg, #ffd700, #daa520, #fff8dc, #daa520);
+    border-radius: 4px;
+    display: flex; justify-content: center; align-items: center;
+    z-index: 1; opacity: 0; transform: scale(0.8);
+    transition: all 0.6s ease 1s; /* Scales up after doors open */
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+}
+
+.ticket-inner {
+    border: 2px dashed #b8860b; width: 90%; height: 85%;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    text-align: center; background: rgba(255,255,255,0.1);
+}
+
+.ticket-inner h3 { color: #8b6508; font-size: 16px; margin-bottom: 5px; text-shadow: 1px 1px 0px rgba(255,255,255,0.6); }
+.ticket-inner p { color: #5c4000; font-size: 11px; font-weight: bold; text-transform: uppercase; }
+
+/* --- CLICK ANIMATIONS (.is-opening) --- */
+
+/* 1. Spin the handle rapidly */
+.is-opening .split-handle-container { animation: unlockSpin 0.5s ease forwards; opacity: 0; }
+
+/* 2. Slide the doors apart */
+.is-opening .left-door { transform: translateX(-100%); }
+.is-opening .right-door { transform: translateX(100%); }
+
+/* 3. Reveal and pulse the Golden Ticket */
+.is-opening .golden-ticket { opacity: 1; transform: scale(1); animation: ticketShimmer 1.5s infinite 1.2s; }
+
+/* 4. Fade out the text plate below */
+.is-opening .safe-text-plate { opacity: 0; transition: opacity 0.3s; }
+
+@keyframes unlockSpin {
+    0% { transform: translate(-50%, -50%) rotate(0deg); }
+    100% { transform: translate(-50%, -50%) rotate(180deg); }
+}
+
+@keyframes ticketShimmer {
+    0%, 100% { filter: brightness(1); box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
+    50% { filter: brightness(1.2); box-shadow: 0 0 40px rgba(255, 215, 0, 1); }
+}
+
+/* ================= PAGE CURL LIFT HOVER ================= */
+
+/* 1. Base Button Styling */
+.type-btn {
+    position: relative;
+    z-index: 1; /* Creates a stacking context so the shadow stays behind it */
+    background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(0,0,0,0.2)) !important;
+    border: 1px solid rgba(255, 204, 0, 0.2) !important;
+    border-radius: 4px !important; /* Slightly sharper corners like a book page */
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1) !important;
+}
+
+/* 2. The Invisible Shadow Element */
+.type-btn::after {
+    content: '';
+    position: absolute;
+    z-index: -1; /* Tucks it perfectly behind the button's background */
+    bottom: 12px; 
+    right: 12px;
+    width: 60%; 
+    height: 30%;
+    box-shadow: 0 0 0 rgba(0, 0, 0, 0); /* Hidden by default */
+    
+    /* Skew and rotate the box so its bottom-right corner sticks out at an angle */
+    transform: skew(15deg) rotate(6deg);
+    transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* 3. The Hover Interaction (Lifting the Paper) */
+.type-btn:hover {
+    /* Lifts the button up, slightly tilts it to the left, and scales it */
+    transform: translateY(-6px) rotate(-1deg) scale(1.02) !important; 
+    background: linear-gradient(145deg, rgba(255, 204, 0, 0.15), rgba(0,0,0,0.4)) !important;
+    border-color: rgba(255, 204, 0, 0.6) !important;
+    
+    /* Inner shadow gives the illusion that the corner is bending upwards toward the light */
+    box-shadow: inset -4px -4px 10px rgba(255, 204, 0, 0.1), 0 4px 8px rgba(0,0,0,0.3) !important;
+    
+    /* Softening the bottom-right corner adds to the "curving paper" look */
+    border-bottom-right-radius: 16px !important;
+}
+
+/* 4. The Hover Shadow State (The Curl Effect) */
+.type-btn:hover::after {
+    /* Drops a heavy, angled shadow to create the illusion of the corner peeling off the page */
+    box-shadow: 12px 18px 20px rgba(0, 0, 0, 0.8);
+    bottom: 10px;
+    right: 15px;
+}
+
+/* ================= EXCLUSIVE / LOCKED CARD STYLING ================= */
+.locked-card {
+    position: relative;
+    cursor: pointer !important; /* Keep the pointer so it feels clickable */
+}
+
+/* Blur the inner content but keep the card background and hover effects */
+.locked-card .open-book-container,
+.locked-card .clipboard-container,
+.locked-card .vault-container {
+    filter: blur(5px) grayscale(0.6);
+    opacity: 0.6;
+    transition: all 0.4s ease;
+    pointer-events: none; /* Prevent clicks on the inner blurred elements */
+}
+
+/* The Exclusive Badge that sits on top of the blur */
+.exclusive-badge {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.85);
+    border: 1px solid #ffcc00;
+    color: #ffcc00;
+    padding: 15px 25px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 16px;
+    text-align: center;
+    z-index: 50;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    backdrop-filter: blur(10px);
+    width: 80%;
+}
+
+.exclusive-badge span {
+    display: block;
+    font-size: 12px;
+    color: #ccc;
+    margin-top: 5px;
+    font-weight: 400;
+}
+
+/* ================= BOOK CLICK ANIMATION ================= */
+/* 1. Scale up and glow golden when clicked */
+.open-book-card.is-clicked {
+    transform: scale(1.05) translateY(-10px) !important;
+    box-shadow: 0 15px 40px rgba(255, 204, 0, 0.4) !important;
+    border-color: #ffcc00 !important;
+    transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* 2. Force the page to flip over */
+.open-book-card.is-clicked .book-right-page-flip {
+    transform: rotateY(-180deg) !important;
+    transition: transform 0.8s cubic-bezier(0.64, 0.04, 0.35, 1) !important;
+}
+
+/* 3. Keep it a SOLID paper page, but add a beautiful golden glow */
+.open-book-card.is-clicked .flip-back {
+    /* Keep the realistic paper gradient */
+    background: linear-gradient(to right, #b0b5b9 0%, #e0e5e7 5%, #ffffff 20%) !important;
+    /* Add a golden inner glow and border */
+    box-shadow: inset 0 0 30px rgba(255, 204, 0, 0.3), inset -5px 0 10px rgba(0,0,0,0.1) !important;
+    border: 1px solid #ffcc00 !important;
+}

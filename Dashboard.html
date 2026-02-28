@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Dashboard | Success Academy</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="Dashboard.css">
+<link rel="icon" href="image/WEB LOGO.jpg">
+
+</head>
+<body>
+<div class="loader">
+  <div class="spinner"></div>
+</div>
+
+<nav class="navbar">
+  <div class="logo">Success Academy</div>
+
+  <div class="hamburger" id="hamburger">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
+  <ul class="nav-links" id="navLinks">
+  <li><a href="Dashboard.html" class="active">Dashboard</a></li>
+  <li><a href="Notice.html">Notices</a></li>
+  <li><a href="Practice_zone.html">Practice Zone</a></li>
+  <li><a href="Leaderboard.html">Leaderboard</a></li>
+  <li><a href="Ai_Doubt.html">AI Doubt Solver</a></li>
+ <li></li>
+ <button class="logout-btn" onclick="confirmLogout()">Logout</button>
+ </ul>
+</nav>
+<div class="menu-overlay" id="menuOverlay"></div>
+
+<div class="main-container">
+
+  <div class="bg-3d-elements">
+  <span class="float-item pencil">✏️</span>
+  <span class="float-item pen">🖋️</span>
+  <span class="float-item ruler">📐</span>
+  <span class="float-item book">📚</span>
+  <span class="float-item bulb">💡</span>
+  <span class="float-item target">🎯</span>
+</div>
+
+<aside class="profile-panel">
+  
+  <div class="passport-page left-page">
+    <h3>Student Profile</h3>
+    <div class="profile-item"><span>Name:</span> <span id="studentName">Loading...</span></div>
+    <div class="profile-item"><span>Reg No:</span> <span id="studentRegNo">Loading...</span></div>
+    <div class="profile-item"><span>Course:</span> <span id="studentGroup">Loading...</span></div>
+    <div class="profile-item"><span>Type:</span> <span id="studentBatch">Loading...</span></div>
+    <div class="profile-item"><span>Std:</span> <span id="studentStandard">Loading...</span></div>
+  </div>
+  
+  <div class="mobile-book-spine"></div>
+  
+  <div class="passport-page right-page">
+    <div class="passport-stamp">VERIFIED</div> 
+    
+    <div class="attendance-box">
+      <p>Attendance: <strong id="attendanceText">Loading...</strong></p>
+      <div class="progress-bar">
+        <div class="progress-fill" id="attendanceBar"></div>
+      </div>
+    </div>
+  </div>
+
+</aside>
+
+  <section class="content-area">
+
+    <section class="events-section">
+      <h2 class="section-title">Upcoming Events</h2>
+      
+      <div class="timeline" id="eventsTimeline">
+          </div>
+    </section>
+
+    <section class="timetable-section">
+  <h2 class="section-title">Class Time Table</h2>
+  <div class="timetable-wrapper">
+    <div class="timetable-container">
+      <img src="image/download.jpeg" alt="Class Time Table" class="timetable-image">
+    </div>
+  </div>
+</section>
+
+    <section class="message-admin-section">
+      <h2 class="section-title">Message Admin</h2>
+      <p style="color: #ccc; margin-bottom: 20px; font-size: 14px;">Need help? Send a direct message to the administration.</p>
+      
+      <div class="message-container">
+        <form onsubmit="sendMessage(event)">
+          <label for="msgSubject">Subject</label>
+          <input type="text" id="msgSubject" class="msg-input" placeholder="e.g., Leave Application, Fee Query..." required>
+
+          <label for="msgContent">Message</label>
+          <textarea id="msgContent" class="msg-input" rows="4" placeholder="Type your message to the administration here..." required></textarea>
+
+          <button type="submit" class="msg-btn">Send Message 🚀</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="admin-replies-section">
+      <h2 class="section-title">Message History & Replies</h2>
+      <p style="color: #ccc; margin-bottom: 20px; font-size: 14px;">Click on a message to expand and read the admin's response.</p>
+
+      <div class="replies-container" id="repliesContainer">
+        </div>
+    </section>
+
+  </section> 
+
+</div> 
+
+<script src="Dashboard.js" defer></script>
+</body>
+</html>
