@@ -11,25 +11,49 @@
 </head>
 
 <body>
-<div class="loader">
-  <div class="spinner"></div>
-</div>
-
 <div class="auth-modal" id="applyModal">
-  <div class="auth-box">
-    <button class="close-btn">&times;</button>
+  <div class="login-box"> <button class="close-btn">&times;</button>
     <h2>Apply for Admission</h2>
-    <p style="color: #ccc; margin-bottom: 20px; font-size: 14px;">Fill this form to inquire. Our team will contact you for the admission process.</p>
-    <form id="admissionInquiryForm">
-      <input type="text" placeholder="Full Name" required>
-      <input type="tel" placeholder="Mobile Number" required>
-      <select required>
-        <option value="">Select Course</option>
-        <option>MHT-CET</option>
-        <option>JEE</option>
-        <option>NEET</option>
+    <p style="color: #ccc; margin-bottom: 20px; font-size: 14px; text-align: center;">Fill this form to inquire. Our team will contact you for the admission process.</p>
+    
+    <form id="admissionInquiryForm" class="registration-form">
+      <input type="text" id="applyName" placeholder="Student Name" required>
+      <input type="tel" id="applyPhone" placeholder="Mobile Number" required>
+      <input type="email" id="applyEmail" placeholder="Email Address" required>
+      <input type="tel" id="applyParentPhone" placeholder="Parent Mobile Number" required>
+      <input type="text" id="applySchool" placeholder="School Name" required>
+
+      <label>Standard</label>
+      <select id="applyStandard" required>
+        <option value="">Select Standard</option>
+        <option value="11th">11th Standard</option>
+        <option value="12th">12th Standard</option>
       </select>
-      <button type="submit" class="glass-btn">Submit Inquiry</button>
+      
+      <label>Group</label>
+      <select id="applyGroup" required>
+        <option value="">Select Group</option>
+        <option>PCM</option>
+        <option>PCB</option>
+        <option>PCMB</option>
+      </select>
+
+      <label>Type</label>
+      <select id="applyType" required>
+        <option value="">Select Type</option>
+        <option value="Regular">Regular</option>
+        <option value="Regular+Academy">Regular+Academy</option>
+        <option value="Crash Course">Crash Course</option>
+      </select>
+
+      <label>Select Course</label>
+      <div class="course-options">
+        <label><input type="checkbox" class="apply-course-cb" value="MHT-CET"><span>MHT-CET</span></label>
+        <label><input type="checkbox" class="apply-course-cb" value="JEE"><span>JEE</span></label>
+        <label><input type="checkbox" class="apply-course-cb" value="NEET"><span>NEET</span></label>
+      </div>
+
+      <button type="submit" class="glass-btn">Submit Application</button>
     </form>
   </div>
 </div>
@@ -37,13 +61,11 @@
 <div class="auth-modal" id="unlockModal">
   <div class="auth-box">
     <button class="close-btn">&times;</button>
-    <h2>Unlock Registration</h2>
-    <p style="color: #ccc; margin-bottom: 20px; font-size: 14px;">Enter the 6-digit numeric code provided during your physical admission.</p>
-    <form id="unlockForm">
-      <input type="text" id="accessCodeInput" placeholder="Enter 6-Digit Code" maxlength="6" required>
-      <button type="submit" class="glass-btn">Verify Access Code</button>
-    </form>
-    <div id="unlockError" style="color: #ff4d4d; margin-top: 10px; display: none; text-align: center;">❌ Invalid Access Code</div>
+    <h2>Scan QR to Unlock</h2>
+<div id="qrScanner" style="width:300px; margin:auto;"></div>
+    <p style="color:#ccc; font-size:14px; margin-top:10px;">
+      Scan the QR provided by the Academy.
+    </p>
   </div>
 </div>
 
@@ -53,10 +75,11 @@
     <h2>Student Registration</h2>
     <form id="registrationForm" class="registration-form">
       <input type="text" id="regName" placeholder="Student Name" required>
-      <input type="tel" id="regPhone" placeholder="Mobile Number" required>
-      <input type="email" id="regEmail" placeholder="Email Address" required>
-      <input type="tel" id="regParentPhone" placeholder="Parent Mobile Number" required>
-      <input type="text" id="regSchool" placeholder="School Name" required>
+<input type="tel" id="regPhone" placeholder="Mobile Number" required>
+<input type="email" id="regEmail" placeholder="Email Address" required>
+<input type="tel" id="regParentPhone" placeholder="Parent Mobile Number" required>
+<input type="text" id="regSchool" placeholder="School Name" required>
+
 
       <label>Standard</label>
       <select id="regStandard" required>
@@ -66,7 +89,7 @@
       </select>
       
       <label>Group</label>
-      <select  id="regGroup" required>
+      <select id="regGroup" required>
         <option value="">Select Group</option>
         <option>PCM</option>
         <option>PCB</option>
@@ -77,7 +100,7 @@
       <select id="regType" required>
         <option value="">Select Type</option>
         <option value="Regular">Regular</option>
-        <option value="Regular+Academy">Regular + Academy</option>
+        <option value="Regular+Academy">Regular+Academy</option>
         <option value="Crash Course">Crash Course</option>
       </select>
 
@@ -87,6 +110,7 @@
         <label><input type="checkbox" value="JEE"><span>JEE</span></label>
         <label><input type="checkbox" value="NEET"><span>NEET</span></label>
       </div>
+
       <button type="submit" class="glass-btn">Register</button>
     </form>
   </div>
@@ -111,6 +135,24 @@
   </div>
 </div>
 
+<div class="auth-modal" id="adminLoginModal">
+  <div class="auth-box" style="border: 1px solid #ff4d4d; box-shadow: 0 0 30px rgba(255,77,77,0.2);">
+    <button class="close-btn">&times;</button>
+    <div style="text-align: center; font-size: 40px; margin-bottom: 10px;">🛡️</div>
+    <h2 style="color: #ff4d4d; text-align: center;">System Override</h2>
+    <p style="color: #aaa; font-size: 13px; text-align: center; margin-bottom: 20px;">Restricted Access Only.</p>
+    
+    <form id="adminLoginForm">
+      <input type="text" placeholder="Admin ID" required style="border-color: rgba(255,77,77,0.3);">
+      <input type="password" placeholder="Passcode" required style="border-color: rgba(255,77,77,0.3);">
+      
+      <button type="submit" class="glass-btn" style="background: linear-gradient(45deg, #ff4d4d, #cc0000); color: white; margin-top: 10px;">
+        Access Vault
+      </button>
+    </form>
+  </div>
+</div>
+
 <div class="auth-modal" id="otpModal">
   <div class="auth-box">
     <h2>Verify OTP</h2>
@@ -129,6 +171,10 @@
   </div>
 </div>
 
+<div class="loader">
+  <div class="spinner"></div>
+</div>
+
 <div id="particles-js"></div>
 
 <nav class="navbar">
@@ -141,7 +187,7 @@
   <div class="nav-menu" id="navMenu">
     <div class="nav-links">
       <a href="Homepage.html">Home</a>
-      <a href="Result-page.html" class="active">Our Result</a>
+      <a href="Result-page.html">Our Result</a>
     </div>
 
     <div id="publicButtons" class="auth-group">
