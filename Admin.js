@@ -1,18 +1,20 @@
 // ================= BASE CONFIGURATION =================
 const API_BASE_URL = 'https://success-academy.onrender.com/api';
-const ADMIN_KEY = 'SuperSecretAdminPassword123!'; // MUST match process.env.ADMIN_SECRET_KEY in server.js
+const ADMIN_KEY = 'SuperSecretAdminPassword123!'; 
 let allStudentsDB = []; // Will store fetched students
 
-document.addEventListener("DOMContentLoaded", () => {
-    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+// ================= 🚨 STRICT AUTHENTICATION CHECK 🚨 =================
+// Run this IMMEDIATELY before the page even finishes parsing
+const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+if (!currentUser || currentUser.role !== 'admin') {
+    alert("🔒 Unauthorized Access. You must be an Admin.");
+    window.location.replace("Homepage.html"); // Faster than href, blocks 'back' button
     
-    // If no one is logged in, OR if the person logged in is not an admin, kick them out!
-    if (!currentUser || currentUser.role !== 'admin') {
-        alert("🔒 Unauthorized Access. You must be an Admin.");
-        window.location.href = "Homepage.html";
-        return; // Stops the rest of the page from loading
-    }
-});
+    // Throwing an error completely halts the rest of this file from executing.
+    // This stops your data fetching functions from running in the background!
+    throw new Error("Security Breach: Unauthorized access stopped script execution."); 
+}
 
 // ================= INITIALIZATION & PAGE LOADER =================
 window.addEventListener("load", function () {
