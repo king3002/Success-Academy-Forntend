@@ -150,7 +150,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     try {
-        const response = await fetch(`http://localhost:5000/api/student/dashboard/${currentUser.id}`);
+        const response = await fetch(`https://success-academy.onrender.com/api/student/dashboard/${currentUser.id}`);
         const data = await response.json();
 
         if (data.success) {
