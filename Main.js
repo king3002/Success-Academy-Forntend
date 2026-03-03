@@ -186,6 +186,87 @@ async function startQRScanner() {
 //         alert("❌ Camera permission denied or not supported.");
 //     }
 // }
+
+// ==========================================
+// SECRET ADMIN LOGIN (3-SECOND LONG PRESS)
+// ==========================================
+const navLogo = document.querySelector('.logo');
+const adminModal = document.getElementById('adminLoginModal');
+let pressTimer;
+
+// Function to open the secret modal
+function openSecretAdmin() {
+    adminModal.style.display = "flex";
+    // Optional: Triggers a tiny vibration on mobile devices to confirm the unlock!
+    if (navigator.vibrate) navigator.vibrate(50); 
+}
+
+// Start Timer on Touch/Click
+function startPress(e) {
+    // Only listen to left clicks on desktop
+    if (e.type === 'mousedown' && e.button !== 0) return; 
+    
+    pressTimer = window.setTimeout(openSecretAdmin, 3000); // 3000ms = 3 seconds
+}
+
+// Cancel Timer if finger/mouse moves or lifts
+function cancelPress() {
+    clearTimeout(pressTimer);
+}
+
+if (navLogo) {
+    // Desktop Events
+    navLogo.addEventListener('mousedown', startPress);
+    navLogo.addEventListener('mouseup', cancelPress);
+    navLogo.addEventListener('mouseleave', cancelPress);
+    
+    // Mobile Touch Events
+    navLogo.addEventListener('touchstart', startPress, { passive: true });
+    navLogo.addEventListener('touchend', cancelPress);
+    navLogo.addEventListener('touchmove', cancelPress, { passive: true });
+}
+
+// ==========================================
+// SECRET ADMIN AUTHENTICATION LOGIC
+// ==========================================
+document.getElementById("adminLoginForm")?.addEventListener("submit", async function(e) {
+  e.preventDefault();
+  
+  const regNo = this.querySelector("input[type='text']").value.trim();
+  const password = this.querySelector("input[type='password']").value.trim();
+  const loginBtn = this.querySelector("button[type='submit']");
+
+  loginBtn.textContent = "Authenticating...";
+
+  try {
+    const response = await fetch('https://success-academy.onrender.com/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ reg_no: regNo, password: password })
+    });
+
+    const data = await response.json();
+
+    // Extra security: Only let them through if the DB says they are an admin
+    if (data.success && data.user.role === 'admin') {
+      localStorage.setItem("currentUser", JSON.stringify(data.user));
+      loginBtn.textContent = "Access Granted";
+      loginBtn.style.background = "#00ff88"; // Turn button green
+      
+      setTimeout(() => {
+        window.location.href = "Admin.html";
+      }, 1000);
+    } else {
+      alert("❌ Access Denied: Invalid Admin Credentials.");
+      loginBtn.textContent = "Access Vault";
+    }
+  } catch (error) {
+    console.error("Error:", error);
+    alert("❌ Could not connect to the server.");
+    loginBtn.textContent = "Access Vault";
+  }
+});
+
 // ==========================================
 // 3. REGISTRATION & OTP (Backend Connected)
 // ==========================================
