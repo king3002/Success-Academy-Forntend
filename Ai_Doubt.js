@@ -84,7 +84,7 @@ sendBtn.addEventListener('click', async () => {
     else {
       resultContent.innerHTML = `
         <h2>⚠️ Not Allowed</h2>
-        <p>Abhys Kar Phatu dhande naho</p>
+        <p>${data.message}</p>
       `;
     }
 
