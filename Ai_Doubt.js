@@ -58,7 +58,7 @@ sendBtn.addEventListener('click', async () => {
 
   try {
 
-    const response = await fetch("const API_BASE_URL = 'https://success-academy.onrender.com/api/ai-doubt", {
+    const response = await fetch('https://success-academy.onrender.com/api/ai-doubt', {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
