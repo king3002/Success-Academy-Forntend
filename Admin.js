@@ -6,12 +6,12 @@ let allStudentsDB = []; // Will store fetched students
 document.addEventListener("DOMContentLoaded", () => {
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
     
-    // // If no one is logged in, OR if the person logged in is not an admin, kick them out!
-    // if (!currentUser || currentUser.role !== 'admin') {
-    //     alert("🔒 Unauthorized Access. You must be an Admin.");
-    //     window.location.href = "Homepage.html";
-    //     return; // Stops the rest of the page from loading
-    // }
+    // If no one is logged in, OR if the person logged in is not an admin, kick them out!
+    if (!currentUser || currentUser.role !== 'admin') {
+        alert("🔒 Unauthorized Access. You must be an Admin.");
+        window.location.href = "Homepage.html";
+        return; // Stops the rest of the page from loading
+    }
 });
 
 // ================= INITIALIZATION & PAGE LOADER =================
