@@ -293,7 +293,9 @@ function showLockedMessage(featureName) {
     alert(`🔒 ${featureName} is locked.\n\nThis feature is not included in your current batch. Contact administration to upgrade your course access!`);
 }
 
-// NEW FUNCTION: Attempts to turn the 3-prong safe handle
+// NEW FUNCTION: Attempts to turn the 3-prong safe handle & includes 3-tap Easter Egg
+let safeClickCount = 0; // Counter for the demo unlock
+
 function trySafe() {
     const handle = document.getElementById('safeHandle');
     
@@ -306,6 +308,31 @@ function trySafe() {
     setTimeout(() => {
         handle.classList.remove('is-turning');
     }, 400);
+
+    // --- EASTER EGG LOGIC FOR DEMO ---
+    safeClickCount++;
+    
+    if (safeClickCount >= 3) {
+        safeClickCount = 0; // Reset the counter
+        
+        // Wait 400ms so the 3rd handle turn finishes beautifully before swapping
+        setTimeout(() => {
+            // 1. Force the student's state to "completed" for the demo
+            student.has_completed_mcq = true; 
+            
+            // 2. Make sure the system knows we haven't seen the unlock animation yet
+            localStorage.setItem('vaultUnlockedShown', 'false'); 
+            
+            // 3. Re-render the dashboard (swaps the locked safe for the Golden Ticket safe)
+            renderDashboardBasedOnProfile();
+            
+            // 4. Immediately trigger the opening animation after the DOM updates
+            setTimeout(() => {
+                triggerVaultUnlock();
+            }, 100);
+            
+        }, 400); 
+    }
 }
 
 // NEW FUNCTION: Plays the Golden Ticket animation, then swaps to the Blazing Arena
