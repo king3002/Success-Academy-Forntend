@@ -55,6 +55,39 @@ window.onload = async () => {
         console.error("Error fetching student profile:", error);
     }
 };
+
+// ================= ELIGIBILITY & RENDERING =================
+function checkEligibility() {
+    const today = new Date().getDay();
+    
+    // Check if it is NOT the weekend AND the bypass is NOT active
+    if (today !== 0 && today !== 6 && !bypassWeekend) {
+        document.getElementById('eligibilityMessage').innerText = "Tests are currently locked. Please return on Saturday or Sunday.";
+        document.getElementById('eligibilityMessage').classList.remove('hidden');
+        document.getElementById('examOptions').innerHTML = ""; // Hide exams
+        return; 
+    }
+
+    // --- IF WE GET HERE, IT'S THE WEEKEND OR THE CHEAT CODE WAS USED ---
+    
+    document.getElementById('eligibilityMessage').classList.add('hidden');
+    
+    // Render the exam buttons based on the student's target exams
+    const exams = student.target_exam ? student.target_exam.split(',') : ['JEE', 'NEET'];
+    const examGrid = document.getElementById('examOptions');
+    examGrid.innerHTML = ""; // Clear previous
+    
+    exams.forEach(exam => {
+        const cleanName = exam.trim();
+        examGrid.innerHTML += `
+            <div class="exam-card" onclick="selectExam('${cleanName}')">
+                <h3>${cleanName}</h3>
+                <p>Start Live Mock</p>
+            </div>
+        `;
+    });
+}
+
 async function selectExam(examName) {
     // 1. Request Fullscreen immediately upon selecting the exam
     try {
@@ -444,5 +477,51 @@ document.addEventListener('keydown', (event) => {
     if (event.ctrlKey && ['c', 'v', 'p', 's', 'i', 'u'].includes(event.key.toLowerCase())) {
         event.preventDefault();
         triggerSecurityViolation("Keyboard shortcuts are prohibited.");
+    }
+});
+
+// --- DEVELOPER CHEAT CODE: 3-SECOND HOLD ---
+let bypassWeekend = false;
+let holdTimer;
+
+// Wait for the DOM to load before grabbing the button
+document.addEventListener("DOMContentLoaded", () => {
+    const returnBtn = document.querySelector('.return-btn');
+    if (!returnBtn) return;
+
+    // 1. Remove the instant HTML click navigation
+    returnBtn.removeAttribute('onclick');
+
+    // 2. Start the 3-second timer when the mouse is pressed
+    returnBtn.addEventListener('mousedown', startHold);
+    returnBtn.addEventListener('touchstart', (e) => {
+        e.preventDefault(); // Prevents double-firing on mobile
+        startHold();
+    });
+
+    // 3. Cancel the timer if they let go early
+    returnBtn.addEventListener('mouseup', cancelHold);
+    returnBtn.addEventListener('mouseleave', cancelHold);
+    returnBtn.addEventListener('touchend', cancelHold);
+
+    function startHold() {
+        holdTimer = setTimeout(() => {
+            bypassWeekend = true;
+            // Visual feedback that the cheat code worked
+            returnBtn.style.color = "#00ff88"; 
+            returnBtn.style.borderColor = "#00ff88";
+            returnBtn.innerText = "🛠️ Security Bypassed";
+            
+            // Re-run the check to unlock the tests
+            checkEligibility(); 
+        }, 3000); // 3000 milliseconds = 3 seconds
+    }
+
+    function cancelHold() {
+        clearTimeout(holdTimer);
+        // If they just clicked normally (didn't hold for 3 seconds), go back to dashboard
+        if (!bypassWeekend) {
+            window.location.href = 'Practice_zone.html';
+        }
     }
 });
