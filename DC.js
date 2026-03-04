@@ -88,23 +88,29 @@ function checkEligibility() {
     });
 }
 
-async function selectExam(examName) {
-    // 1. Request Fullscreen immediately upon selecting the exam
+function selectExam(examName) {
+    // 1. Request Fullscreen WITHOUT blocking the rest of the code
     try {
         if (document.documentElement.requestFullscreen) {
-            await document.documentElement.requestFullscreen();
+            // We removed the 'await' here so the code keeps running even if blocked
+            document.documentElement.requestFullscreen().catch(err => {
+                console.log("Fullscreen request deferred or blocked by browser.");
+            });
         }
     } catch (err) {
-        console.log("Fullscreen request deferred. Will try again on start.");
+        console.log("Fullscreen request error.");
     }
 
+    // 2. Load the exam data
     document.getElementById('liveExamTitle').innerText = `${examName} - Live Mock Assessment`;
     questions = generateMockQuestions(examName);
     userAnswers = questions.map(q => ({ selected: null, status: 'not-visited' }));
     
+    // 3. Swap the screens
     document.getElementById('selectionScreen').classList.add('hidden');
     document.getElementById('instructionScreen').classList.remove('hidden');
 
+    // 4. Start the camera
     requestCameraAccess();
 }
 
