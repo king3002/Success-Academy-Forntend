@@ -127,3 +127,56 @@ body { background: #050508; color: #fff; overflow-x: hidden; }
     padding: 60px;
     white-space: nowrap;
 }
+/* ================= MOBILE RESPONSIVENESS ================= */
+@media (max-width: 768px) {
+    /* General Panel Adjustments */
+    .glass-panel { padding: 25px 15px; }
+    .glitch-text { font-size: 24px; }
+    
+    /* Instruction Screen Elements */
+    .security-check-box { flex-direction: column; gap: 15px; text-align: center; }
+    .instruction-list { margin-left: 0; padding-left: 20px; }
+    
+    /* Exam Header */
+    .exam-header { flex-direction: column; padding: 15px; gap: 8px; text-align: center; }
+    
+    /* Exam Body Stacking */
+    .exam-body { flex-direction: column; overflow-y: auto; }
+    
+    /* Question Section */
+    .question-section { 
+        border-right: none; 
+        border-bottom: 2px solid #333; 
+        overflow-y: visible; 
+        padding: 20px 15px; 
+        flex: none; 
+    }
+    
+    /* Sidebar Section (Camera & Palette) */
+    .sidebar-section { width: 100%; height: auto; }
+    .proctor-feed { height: 220px; } 
+    .palette-grid { 
+        max-height: 250px; 
+        grid-template-columns: repeat(6, 1fr); /* Fits 6 buttons across on tablets/large phones */
+    }
+    .palette-legend { grid-template-columns: 1fr; gap: 8px; }
+    
+    /* Footer Buttons (Stacked for easy thumb tapping) */
+    .exam-footer { flex-direction: column; gap: 10px; padding: 15px; }
+    .left-actions, .right-actions { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+    .footer-btn { width: 100%; margin: 0 !important; }
+    
+    /* Results Screen */
+    .stats-row { flex-direction: column; gap: 15px; }
+    .score-value { font-size: 36px; }
+    
+    /* Warning Modal */
+    .warning-box { width: 90%; padding: 25px; margin: 20px; }
+    .warning-overlay { padding: 15px; }
+}
+
+/* For very small screens (phones) */
+@media (max-width: 480px) {
+    .palette-grid { grid-template-columns: repeat(5, 1fr); }
+    .exam-card { width: 100%; } /* Makes exam selection cards full width */
+}
