@@ -11,7 +11,7 @@
 </head>
 
 <body>
-
+<canvas id="waveCanvas"></canvas>
 <div class="auth-modal" id="applyModal">
   <div class="login-box"> <button class="close-btn">&times;</button>
     <h2>Apply for Admission</h2>
@@ -176,7 +176,6 @@
   <div class="spinner"></div>
 </div>
 
-<div id="particles-js"></div>
 
 <nav class="navbar">
   <div class="logo">Success Academy</div>
@@ -207,16 +206,56 @@
   </div>
 </nav>
 
-<section id="home" class="hero-clean">
-  <div class="hero-overlay">
-    <h1>Success Academy, Vita</h1>
-    <p>11th & 12th Science | MHT-CET | JEE | NEET</p>
+<section id="home" class="hero-modern">
+  <div class="hero-content">
+    <div class="badge">Admissions Open 2026-27</div>
+    <h1>Shape Your Future with<br><span class="highlight">Success Academy</span></h1>
+    <p>Premier coaching for 11th & 12th Science. Expert faculty and proven results in MHT-CET, JEE, and NEET.</p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="document.getElementById('applyModal').style.display='flex'">Inquire Now</button>
+      <button class="btn-outline" onclick="document.getElementById('about').scrollIntoView()">Explore Academy</button>
+    </div>
   </div>
 </section>
 
+<section class="notice-board reveal">
+  <div class="notice-container">
+    <div class="notice-label">Latest Updates</div>
+    <div class="notice-scroll">
+      <p>🚀 Admissions Open for 2026-27 Batch (11th & 12th Science) &nbsp;&nbsp;|&nbsp;&nbsp; 📅 MHT-CET Crash Course starting next week &nbsp;&nbsp;|&nbsp;&nbsp; 🏆 Congratulations to our recent JEE Advanced qualifiers!</p>
+    </div>
+  </div>
+
+</section>
 <section id="about" class="reveal section">
   <h2 class="section-title">About Us</h2>
   <p>Welcome to Success Academy, where excellence in education meets unparalleled support and guidance. We specialize in preparing students for their 11th and 12th-grade academic journey, ensuring they excel in their studies and beyond...</p>
+</section>
+
+<section id="features" class="section reveal" style="background: rgba(255,255,255,0.02);">
+  <h2 class="section-title">Why Choose Success Academy?</h2>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">👨‍🏫</div>
+      <h3>Expert Faculty</h3>
+      <p>Learn from highly experienced educators dedicated to clearing your concepts from the ground up.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📚</div>
+      <h3>Premium Material</h3>
+      <p>Curated study notes, DPPS, and extensive question banks aligned with the latest exam patterns.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📝</div>
+      <h3>Regular Mock Tests</h3>
+      <p>Weekly testing environment to eliminate exam fear and build strict time-management skills.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎯</div>
+      <h3>Personal Mentoring</h3>
+      <p>One-on-one doubt clearing sessions and personalized academic tracking for every student.</p>
+    </div>
+  </div>
 </section>
 
 <section class="stats">
@@ -250,19 +289,132 @@
 </section>
 
 <section id="infra" class="section reveal">
-  <h2 class="section-title">Infrastructure</h2>
-  <div class="video-container">
-    <video id="academyVideo" autoplay loop muted playsinline><source src="image/infra.mp4" type="video/mp4"></video>
-    <button class="sound-btn" id="soundToggle">🔇</button>
+  <h2 class="section-title">Campus Infrastructure</h2>
+  <div class="infra-layout">
+    
+    <div class="infra-video-wrapper">
+      <video id="academyVideo" autoplay loop muted playsinline>
+        <source src="image/infra.mp4" type="video/mp4">
+      </video>
+      <button class="sound-btn" id="soundToggle">🔇</button>
+      <div class="video-glow"></div>
+    </div>
+
+    <div class="infra-features">
+      <div class="infra-tag">❄️ Fully A.C. Classrooms</div>
+      <div class="infra-tag">💻 Smart Digital Boards</div>
+      <div class="infra-tag">🔬 High-Tech Physics Lab</div>
+      <div class="infra-tag">📚 Advanced Library</div>
+      <div class="infra-tag">🛡️ 24/7 CCTV Security</div>
+    </div>
+
   </div>
 </section>
 
 <section id="goals" class="section reveal">
   <h2 class="section-title">Select Your Goal</h2>
-  <div class="paper-container">
-    <div class="exam-paper" data-course="MHT-CET"><div class="clip"></div><div class="paper-content"><h3>MHT-CET</h3><p>Engineering Entrance Exam</p></div></div>
-    <div class="exam-paper" data-course="JEE"><div class="clip"></div><div class="paper-content"><h3>JEE</h3><p>National Level Engineering Exam</p></div></div>
-    <div class="exam-paper" data-course="NEET"><div class="clip"></div><div class="paper-content"><h3>NEET</h3><p>Medical Entrance Exam</p></div></div>
+  
+  <div class="holo-container">
+    <div class="exam-paper holo-card mhtcet-card" data-course="MHT-CET">
+      <div class="holo-grid"></div>
+      <div class="holo-icon">⚙️</div>
+      <div class="holo-content">
+        <h3>MHT-CET</h3>
+        <p>State Engineering & Pharmacy</p>
+      </div>
+    </div>
+    
+    <div class="exam-paper holo-card jee-card" data-course="JEE">
+      <div class="holo-grid"></div>
+      <div class="holo-icon">⚛️</div>
+      <div class="holo-content">
+        <h3>JEE</h3>
+        <p>National Level Engineering</p>
+      </div>
+    </div>
+    
+    <div class="exam-paper holo-card neet-card" data-course="NEET">
+      <div class="holo-grid"></div>
+      <div class="holo-icon">🧬</div>
+      <div class="holo-content">
+        <h3>NEET</h3>
+        <p>National Medical Entrance</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="testimonials" class="section reveal">
+  <h2 class="section-title">Student Success Stories</h2>
+  <div class="coverflow-container">
+    <div class="coverflow-wrapper">
+      
+      <div class="testimonial-card">
+        <div class="quote-mark">"</div>
+        <p>Success Academy transformed my approach to Physics and Math. The regular mock tests were the exact reason I was able to manage my time.</p>
+        <div class="student-profile">
+          <img src="image/student1.jpg" alt="Rahul D." class="student-avatar">
+          <div class="student-info">
+            <h4>Rahul D.</h4>
+            <span>Scored 99.2%ile in MHT-CET</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="quote-mark">"</div>
+        <p>The personal doubt-clearing sessions are what makes this academy different. The teachers never hesitated to explain concepts.</p>
+        <div class="student-profile">
+          <img src="image/student2.jpg" alt="Sneha K." class="student-avatar">
+          <div class="student-info">
+            <h4>Sneha K.</h4>
+            <span>Admitted to Govt. Medical College</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="quote-mark">"</div>
+        <p>Everything I needed for my board exams and JEE was under one roof. The environment is highly competitive yet friendly.</p>
+        <div class="student-profile">
+          <img src="image/student3.jpg" alt="Aditya M." class="student-avatar">
+          <div class="student-info">
+            <h4>Aditya M.</h4>
+            <span>JEE Mains Qualifier</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="quote-mark">"</div>
+        <p>The faculty here is unmatched. Their strict discipline mixed with highly supportive mentoring gave me the push I needed.</p>
+        <div class="student-profile">
+          <img src="image/student4.jpg" alt="Pooja S." class="student-avatar">
+          <div class="student-info">
+            <h4>Pooja S.</h4>
+            <span>Scored 98.5%ile in MHT-CET</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="testimonial-card">
+        <div class="quote-mark">"</div>
+        <p>I struggled with Chemistry until I joined Success Academy. The premium study materials completely changed my preparation.</p>
+        <div class="student-profile">
+          <img src="image/student5.jpg" alt="Vikram R." class="student-avatar">
+          <div class="student-info">
+            <h4>Vikram R.</h4>
+            <span>NEET Qualifier</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    
+    <div class="coverflow-nav">
+      <button id="cfPrev" class="prev">❮</button>
+      <button id="cfNext" class="next">❯</button>
+    </div>
   </div>
 </section>
 

@@ -566,21 +566,68 @@ if (statsSection) {
   counterObserver.observe(statsSection);
 }
 
-// Image Slider
-const slides = document.querySelectorAll(".image-slider .slide");
-const dots = document.querySelectorAll(".dot");
-if (slides.length > 0) {
-  let currentSlide = 0;
-  function showSlide(index) {
-    slides.forEach(s => s.classList.remove("active"));
-    dots.forEach(d => d.classList.remove("active"));
-    slides[index].classList.add("active");
-    if(dots[index]) dots[index].classList.add("active");
-    currentSlide = index;
+// ==========================================
+// CENTER-FOCUS SHOWCASE CAROUSEL
+// ==========================================
+const sliderSection = document.querySelector(".image-slider");
+
+if (sliderSection) {
+  const slides = sliderSection.querySelectorAll(".slide");
+  const dots = sliderSection.querySelectorAll(".dot");
+  const prevBtn = sliderSection.querySelector(".prev");
+  const nextBtn = sliderSection.querySelector(".next");
+  
+  if (slides.length > 0) {
+    let currentSlide = 0;
+    let slideInterval;
+
+    function showSlide(index) {
+      // 1. Calculate the Left and Right images in the array
+      let prevIndex = (index - 1 + slides.length) % slides.length;
+      let nextIndex = (index + 1) % slides.length;
+
+      // 2. Remove all positioning classes from all slides
+      slides.forEach(s => {
+        s.classList.remove("active", "prev-slide", "next-slide");
+      });
+      dots.forEach(d => d.classList.remove("active"));
+      
+      // 3. Assign the new 3D positions
+      slides[index].classList.add("active");
+      slides[prevIndex].classList.add("prev-slide");
+      slides[nextIndex].classList.add("next-slide");
+      
+      if (dots[index]) dots[index].classList.add("active");
+      currentSlide = index;
+    }
+
+    function nextSlide() { showSlide((currentSlide + 1) % slides.length); }
+    function prevSlide() { showSlide((currentSlide - 1 + slides.length) % slides.length); }
+
+    function startAutoSlide() { slideInterval = setInterval(nextSlide, 4000); }
+    function resetAutoSlide() { clearInterval(slideInterval); startAutoSlide(); }
+
+    if (nextBtn) nextBtn.addEventListener("click", () => { nextSlide(); resetAutoSlide(); });
+    if (prevBtn) prevBtn.addEventListener("click", () => { prevSlide(); resetAutoSlide(); });
+
+    dots.forEach((dot, index) => {
+      dot.addEventListener("click", () => { showSlide(index); resetAutoSlide(); });
+    });
+
+    // BONUS: Allow users to click the blurred side images to bring them to the center!
+    slides.forEach((slide, index) => {
+      slide.addEventListener("click", () => {
+        if (slide.classList.contains("prev-slide") || slide.classList.contains("next-slide")) {
+          showSlide(index);
+          resetAutoSlide();
+        }
+      });
+    });
+
+    // Initialize the first layout
+    showSlide(0);
+    startAutoSlide();
   }
-  document.querySelector(".next")?.addEventListener("click", () => showSlide((currentSlide + 1) % slides.length));
-  document.querySelector(".prev")?.addEventListener("click", () => showSlide((currentSlide - 1 + slides.length) % slides.length));
-  setInterval(() => showSlide((currentSlide + 1) % slides.length), 4000);
 }
 
 // Video Controls
@@ -706,3 +753,221 @@ if (typeof confetti !== "undefined") {
     }
   }, true);
 }
+// ==========================================
+// GLOWING AMBIENT WAVEFORMS (NO CURSOR EFFECT)
+// ==========================================
+const canvas = document.getElementById('waveCanvas');
+
+if (canvas) {
+  const ctx = canvas.getContext('2d');
+  let width, height;
+  let time = 0;
+
+  function resize() {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  // Define 6 waves - Brighter opacities, varied speeds and heights
+  const waves = [
+    { yOffset: 0.45, amplitude: 120, length: 0.0015, speed: 0.012, color: 'rgba(255, 203, 116, 0.7)' }, // Bright Gold
+    { yOffset: 0.55, amplitude: 160, length: 0.001,  speed: 0.008, color: 'rgba(26, 100, 219, 0.7)' },  // Bright Blue
+    { yOffset: 0.65, amplitude: 100, length: 0.002,  speed: 0.015, color: 'rgba(248, 250, 252, 0.5)' }, // Bright White
+    { yOffset: 0.35, amplitude: 90,  length: 0.0025, speed: 0.02,  color: 'rgba(255, 203, 116, 0.4)' }, // Fast Gold
+    { yOffset: 0.75, amplitude: 140, length: 0.0012, speed: 0.01,  color: 'rgba(26, 100, 219, 0.4)' },  // Deep Blue
+    { yOffset: 0.50, amplitude: 110, length: 0.0018, speed: 0.018, color: 'rgba(248, 250, 252, 0.3)' }  // Fast White
+  ];
+
+  function animate() {
+    requestAnimationFrame(animate);
+    ctx.clearRect(0, 0, width, height);
+
+    waves.forEach(wave => {
+      ctx.beginPath();
+      
+      // Make the lines glow!
+      ctx.shadowBlur = 15;
+      ctx.shadowColor = wave.color;
+      
+      // We step by 5 pixels for high performance math calculation
+      for (let x = 0; x <= width; x += 5) {
+        // Pure, smooth sine wave calculation
+        let y = Math.sin(x * wave.length + time * wave.speed) * wave.amplitude + height * wave.yOffset;
+        
+        if (x === 0) {
+          ctx.moveTo(x, y);
+        } else {
+          ctx.lineTo(x, y);
+        }
+      }
+      
+      ctx.strokeStyle = wave.color;
+      ctx.lineWidth = 2.5; // Thicker, more visible lines
+      ctx.stroke();
+    });
+    
+    time++;
+  }
+  
+  animate();
+}
+
+// ==========================================
+// CINEMATIC THEATER MODE LOGIC
+// ==========================================
+const infraLayout = document.querySelector('.infra-layout');
+
+if (infraLayout) {
+  // 1. Dynamically create the dark overlay so you don't have to edit your HTML
+  const overlay = document.createElement('div');
+  overlay.classList.add('theater-overlay');
+  document.body.appendChild(overlay);
+
+  // 2. Turn OFF the lights when mouse enters the video or tags area
+  infraLayout.addEventListener('mouseenter', () => {
+    document.body.classList.add('theater-active');
+  });
+  
+  // 3. Turn ON the lights when mouse leaves the area
+  infraLayout.addEventListener('mouseleave', () => {
+    document.body.classList.remove('theater-active');
+  });
+
+  // Keep the pulsing video effect from Option 4 when hovering specific tags
+  const infraTags = document.querySelectorAll('.infra-tag');
+  const videoWrapper = document.querySelector('.infra-video-wrapper');
+  
+  infraTags.forEach(tag => {
+    tag.addEventListener('mouseenter', () => videoWrapper.classList.add('pulse-active'));
+    tag.addEventListener('mouseleave', () => videoWrapper.classList.remove('pulse-active'));
+  });
+}
+
+// ==========================================
+// 3D COVER FLOW LOGIC
+// ==========================================
+const cfWrapper = document.querySelector('.coverflow-wrapper');
+
+if (cfWrapper) {
+  const cards = cfWrapper.querySelectorAll('.testimonial-card');
+  let currentIndex = 0;
+
+  function updateCoverflow() {
+    cards.forEach((card, i) => {
+      card.classList.remove('cf-active', 'cf-left', 'cf-right', 'cf-hidden');
+
+      if (i === currentIndex) {
+        card.classList.add('cf-active');
+      } else if (i < currentIndex) {
+        // Swing to the left
+        card.classList.add(i === currentIndex - 1 ? 'cf-left' : 'cf-hidden');
+      } else if (i > currentIndex) {
+        // Swing to the right
+        card.classList.add(i === currentIndex + 1 ? 'cf-right' : 'cf-hidden');
+      }
+    });
+  }
+
+  document.getElementById('cfNext')?.addEventListener('click', () => {
+    if (currentIndex < cards.length - 1) {
+      currentIndex++;
+      updateCoverflow();
+    }
+  });
+
+  document.getElementById('cfPrev')?.addEventListener('click', () => {
+    if (currentIndex > 0) {
+      currentIndex--;
+      updateCoverflow();
+    }
+  });
+
+  // Clicking a side card also brings it to the center
+  cards.forEach((card, index) => {
+    card.addEventListener('click', () => {
+      currentIndex = index;
+      updateCoverflow();
+    });
+  });
+
+  updateCoverflow(); // Initial call
+}
+
+// ==========================================
+// BACKGROUND FLOATING SCIENCE SYMBOLS
+// ==========================================
+function spawnScienceSymbol() {
+  const symbols = [
+    { char: '⚛', color: '#00F0FF', type: 'text' }, // Physics - Cyan
+    { char: '∑', color: '#FFCB74', type: 'text' }, // Math - Gold
+    { char: '⌬', color: '#ff4d4d', type: 'text' }, // Chemistry - Red
+    { char: '🧬', color: '#00FF66', type: 'emoji' } // Biology - Green
+  ];
+
+  const symbolData = symbols[Math.floor(Math.random() * symbols.length)];
+  const el = document.createElement('div');
+  el.classList.add('science-symbol');
+  
+  if (symbolData.type === 'emoji') {
+    el.classList.add('emoji');
+  } else {
+    // SINGLE GLOW: Changed back to a single, softer shadow instead of the double blinding one
+    el.style.color = symbolData.color;
+    el.style.textShadow = `0 0 12px ${symbolData.color}`;
+  }
+  
+  el.innerText = symbolData.char;
+  
+  // FULL SCREEN SPREAD: Removed margins so they spawn edge-to-edge horizontally and vertically
+  const startX = Math.random() * window.innerWidth;
+  const startY = Math.random() * window.innerHeight;
+  
+  el.style.left = `${startX}px`;
+  el.style.top = `${startY}px`;
+  
+  // Randomize the size to be slightly larger (between 35px and 85px)
+  const size = Math.random() * 50 + 35; 
+  el.style.fontSize = `${size}px`;
+
+  document.body.appendChild(el);
+
+  // Remove the element after 8 seconds (matching the new CSS animation time)
+  setTimeout(() => {
+    el.remove();
+  }, 8000);
+}
+
+// Spawn much faster! (Every 800ms instead of 1500ms to fill the screen)
+setInterval(spawnScienceSymbol, 800);
+
+// Spawn a massive burst of 12 symbols immediately so the screen is full the second it loads
+for(let i=0; i<12; i++) {
+  setTimeout(spawnScienceSymbol, i * 150);
+}
+
+// ==========================================
+// SOCIAL BUTTON CLICK ANIMATION DELAY
+// ==========================================
+const socialButtons = document.querySelectorAll('.social-btn');
+
+socialButtons.forEach(btn => {
+  btn.addEventListener('click', function(e) {
+    // 1. Stop the browser from immediately opening the link
+    e.preventDefault(); 
+    
+    // 2. Get the URL and target (_blank) from the HTML
+    const url = this.getAttribute('href');
+    const target = this.getAttribute('target') || '_self';
+    
+    // 3. Wait exactly 500ms for your 3D CSS animation to finish playing
+    setTimeout(() => {
+      if (target === '_blank') {
+        window.open(url, '_blank'); // Opens in a new tab/app
+      } else {
+        window.location.href = url; // Opens in the same tab
+      }
+    }, 500); 
+  });
+});
