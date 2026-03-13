@@ -13,6 +13,9 @@ window.addEventListener("load", () => {
 // ==========================================
 // 1. SHARED NAVBAR & STATE MANAGEMENT
 // ==========================================
+// ==========================================
+// 1. SHARED NAVBAR & STATE MANAGEMENT
+// ==========================================
 function updateNavbarState() {
   const isRegistered = localStorage.getItem("isRegistered");
   const isUnlocked = localStorage.getItem("isUnlocked");
@@ -23,8 +26,9 @@ function updateNavbarState() {
     registered: document.getElementById("registeredButtons")
   };
   
-  // Target the Contact section
+  // Target the Contact section and the new Hero button
   const contactSection = document.getElementById("contact");
+  const heroInquireBtn = document.getElementById("heroInquireBtn"); 
 
   if (groups.public) groups.public.style.display = "none";
   if (groups.unlocked) groups.unlocked.style.display = "none";
@@ -33,20 +37,23 @@ function updateNavbarState() {
   if (isRegistered === "true") {
     if (groups.registered) groups.registered.style.display = "flex";
     
-    // HIDE the entire Contact Us section for registered students
+    // HIDE the entire Contact Us section and Inquire button for registered students
     if (contactSection) contactSection.style.display = "none"; 
+    if (heroInquireBtn) heroInquireBtn.style.display = "none"; 
     
   } else if (isUnlocked === "true") {
     if (groups.unlocked) groups.unlocked.style.display = "flex";
     
-    // Show Contact Us section for unlocked (but unregistered) users
+    // Show Contact Us section but HIDE the Inquire button for unlocked users
     if (contactSection) contactSection.style.display = "block";
+    if (heroInquireBtn) heroInquireBtn.style.display = "none"; 
     
   } else {
     if (groups.public) groups.public.style.display = "flex";
     
-    // Show Contact Us section for completely public visitors
+    // Show Contact Us section and SHOW the Inquire button for completely public visitors
     if (contactSection) contactSection.style.display = "block";
+    if (heroInquireBtn) heroInquireBtn.style.display = "inline-block"; 
   }
 }
 
