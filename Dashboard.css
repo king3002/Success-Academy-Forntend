@@ -835,16 +835,5 @@ select.admin-input option, select.glass-input option {
     margin-top: 10px;
   }
 
-  /* 4. Subdue the 3D floating background elements WITHOUT breaking animations */
-  .bg-3d-elements .float-item {
-    opacity: 0.25 !important; /* Slightly brighter so you can actually see them */
-  }
   
-  /* Shrink them using font-size so the transform animations still work */
-  .pencil { font-size: 50px !important; }
-  .pen { font-size: 40px !important; }
-  .ruler { font-size: 45px !important; }
-  .book { font-size: 30px !important; }
-  .bulb { font-size: 25px !important; }
-  .target { font-size: 35px !important; }
 }
