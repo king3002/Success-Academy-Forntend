@@ -1087,3 +1087,26 @@ async function generateQR() {
         qrContainer.innerHTML = "Server error";
     }
 }
+
+async function addScheduleSlot(event) {
+    event.preventDefault();
+    const data = {
+        target_date: document.getElementById('ttDate').value,
+        target_standard: document.getElementById('ttStd').value,
+        start_time: document.getElementById('ttStart').value,
+        end_time: document.getElementById('ttEnd').value,
+        subject: document.getElementById('ttSubject').value,
+        topic: document.getElementById('ttTopic').value,
+        target_type: 'All'
+    };
+
+    const response = await fetch(`${API_BASE_URL}/admin/timetable`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-admin-key': ADMIN_KEY },
+        body: JSON.stringify(data)
+    });
+    if((await response.json()).success) {
+        alert("✅ Slot Added!");
+        event.target.reset();
+    }
+}

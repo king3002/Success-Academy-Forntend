@@ -175,6 +175,31 @@
           </div>
         </div>
       </section>
+
+      <li><a href="#" data-target="timetable-mgmt">📅 Daily Schedule</a></li>
+
+<section id="timetable-mgmt" class="content-section">
+    <h3 class="section-title">Manage Daily Schedule</h3>
+    <div class="form-panel">
+        <form onsubmit="addScheduleSlot(event)">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <input type="date" id="ttDate" class="admin-input" required>
+                <select id="ttStd" class="admin-input" required>
+                    <option value="All">Both Standards</option>
+                    <option value="11th">11th</option>
+                    <option value="12th">12th</option>
+                </select>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <input type="time" id="ttStart" class="admin-input" required>
+                <input type="time" id="ttEnd" class="admin-input" required>
+            </div>
+            <input type="text" id="ttSubject" class="admin-input" placeholder="Subject (e.g. Physics)" required>
+            <input type="text" id="ttTopic" class="admin-input" placeholder="Topic (Optional)">
+            <button type="submit" class="glass-btn">Add to Schedule</button>
+        </form>
+    </div>
+</section>
       
 
       <section id="attendance" class="content-section">
