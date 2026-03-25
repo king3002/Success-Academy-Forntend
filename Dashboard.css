@@ -745,3 +745,68 @@ select.admin-input option, select.glass-input option {
     padding: 12px;
     font-size: 14px;
 }
+/* =========================================================
+   MASTER MOBILE RESPONSIVENESS FIXES (Keep at bottom of file)
+   ========================================================= */
+
+/* 1. Fix the 500px bug and allow the panel to shrink */
+@media(max-width: 900px) {
+  .profile-panel {
+    width: 100% !important; /* Forces override of line 430 */
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+    top: 0;
+  }
+}
+
+/* 2. Stack the passport pages and adjust mobile UI */
+@media(max-width: 600px) {
+  /* Stack the passport pages vertically */
+  .profile-panel {
+    flex-direction: column !important;
+  }
+  
+  .passport-page {
+    width: 100%;
+    padding: 20px 15px;
+  }
+
+  /* Create a visual fold between the stacked pages */
+  .right-page {
+    border-top: 2px dashed rgba(26, 41, 66, 0.2);
+    padding-top: 30px;
+  }
+
+  /* Shrink the stamp so it doesn't overlap text */
+  .passport-stamp {
+    width: 65px; 
+    height: 65px;
+    font-size: 10px;
+    top: 10px; 
+    right: 10px;
+  }
+
+  /* 3. Auto-unroll the timetable for mobile tap accessibility */
+  .timetable-wrapper::before, 
+  .timetable-wrapper::after {
+    display: none; /* Hide the 3D rolled paper casing on mobile */
+  }
+  
+  .timetable-container {
+    transform: scaleY(1); /* Unroll it permanently */
+    opacity: 1;
+    margin-top: 10px;
+  }
+
+  /* 4. Subdue the 3D floating background elements */
+  .bg-3d-elements .float-item {
+    transform: scale(0.3) !important;
+    opacity: 0.15 !important;
+  }
+  
+  /* Adjust timeline padding for narrow screens */
+  .timeline {
+    padding-left: 20px;
+  }
+}
