@@ -178,7 +178,13 @@ function renderMarks(marks) {
     }
 
     marks.forEach((mark, index) => {
-        // ADDED: marks-card class and flying numbers
+        // Logic for rank suffix (1st, 2nd, 3rd, etc.)
+        const j = mark.rank % 10, k = mark.rank % 100;
+        let suffix = "th";
+        if (j == 1 && k != 11) suffix = "st";
+        else if (j == 2 && k != 12) suffix = "nd";
+        else if (j == 3 && k != 13) suffix = "rd";
+
         const noteHtml = `
             <div class="note-card marks-card">
               <div class="card-particles">
@@ -189,8 +195,13 @@ function renderMarks(marks) {
                 <span class="p5">95</span>
               </div>
               <h3>${mark.subject}</h3>
-              <p style="font-size: 14px; margin-bottom: 5px; color: #333;">${mark.exam_title}</p>
-              <p>Score: <strong>${mark.marks_obtained}/${mark.total_marks}</strong></p>
+              <p style="font-size: 14px; margin-bottom: 5px; color: #333; font-weight: 600;">${mark.exam_title}</p>
+              
+              <div style="background: rgba(0,0,0,0.05); padding: 10px; border-radius: 8px; margin: 10px 0;">
+                <p style="margin: 0; font-size: 13px;">Rank: <strong style="font-size: 18px; color: #1a2942;">${mark.rank}${suffix}</strong></p>
+                <p style="margin: 0;">Score: <strong>${mark.marks_obtained}/${mark.total_marks}</strong></p>
+              </div>
+
               <p style="font-size: 11px; color: #555; margin-top: 15px;">Date: ${new Date(mark.exam_date).toLocaleDateString('en-GB')}</p>
             </div>
         `;
