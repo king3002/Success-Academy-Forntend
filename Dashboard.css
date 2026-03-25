@@ -760,41 +760,77 @@ select.admin-input option, select.glass-input option {
   }
 }
 
-/* 2. Stack the passport pages and adjust mobile UI */
+/* 2. Miniaturized Two-Page Passport for Mobile */
 @media(max-width: 600px) {
-  /* Stack the passport pages vertically */
+  /* Force it to stay side-by-side */
   .profile-panel {
-    flex-direction: column !important;
+    flex-direction: row !important;
   }
   
+  /* Each page takes exactly half the screen */
   .passport-page {
-    width: 100%;
-    padding: 20px 15px;
+    width: 50% !important;
+    padding: 15px 10px !important; /* Heavily reduced padding */
   }
 
-  /* Create a visual fold between the stacked pages */
+  /* Remove the dashed border from the previous vertical stack */
   .right-page {
-    border-top: 2px dashed rgba(26, 41, 66, 0.2);
-    padding-top: 30px;
+    border-top: none !important;
+    padding-top: 15px !important;
   }
 
-  /* Shrink the stamp so it doesn't overlap text */
+  /* Scale down all text to fit the narrow columns */
+  .profile-panel h3 {
+    font-size: 13px !important;
+    margin-bottom: 10px !important;
+    padding-bottom: 5px !important;
+    letter-spacing: 0px !important;
+  }
+
+  .profile-panel .profile-item {
+    font-size: 11px !important;
+    margin-bottom: 8px !important;
+    word-break: break-word; /* Prevents long emails/names from breaking the layout */
+  }
+
+  .attendance-box p {
+    font-size: 12px !important;
+    margin-bottom: 5px !important;
+  }
+
+  /* Shrink the red verification stamp so it doesn't block text */
   .passport-stamp {
-    width: 65px; 
-    height: 65px;
-    font-size: 10px;
-    top: 10px; 
-    right: 10px;
+    width: 50px !important; 
+    height: 50px !important;
+    font-size: 8px !important;
+    border-width: 2px !important;
+    top: 5px !important; 
+    right: 5px !important;
+  }
+  
+  .passport-stamp::before {
+    inset: 2px !important;
+    border-width: 1px !important;
+  }
+
+  /* Shrink the pencil scribble attendance bar */
+  .progress-bar {
+    height: 20px !important;
+  }
+  
+  .progress-fill {
+    /* Scales down the custom SVG pencil scribble to match the new height */
+    background-size: 40px 20px !important; 
   }
 
   /* 3. Auto-unroll the timetable for mobile tap accessibility */
   .timetable-wrapper::before, 
   .timetable-wrapper::after {
-    display: none; /* Hide the 3D rolled paper casing on mobile */
+    display: none; 
   }
   
   .timetable-container {
-    transform: scaleY(1); /* Unroll it permanently */
+    transform: scaleY(1); 
     opacity: 1;
     margin-top: 10px;
   }
@@ -805,7 +841,6 @@ select.admin-input option, select.glass-input option {
     opacity: 0.15 !important;
   }
   
-  /* Adjust timeline padding for narrow screens */
   .timeline {
     padding-left: 20px;
   }
