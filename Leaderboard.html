@@ -41,6 +41,45 @@
         <span class="float-item bulb">🥈</span>
         <span class="float-item target">🥉</span>
     </div>
+    <div class="glass-panel" style="max-width: 900px; margin: 0 auto 40px auto;">
+    <h2 style="color: #ffcc00; text-align: center; margin-bottom: 20px;">📅 Individual Exam Leaderboard</h2>
+    
+    <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-bottom: 30px;">
+        <div style="display: flex; flex-direction: column; align-items: flex-start;">
+            <label style="color: #ccc; font-size: 12px; margin-bottom: 5px;">Select Exam Date</label>
+            <input type="date" id="examDateFilter" class="glass-input" style="width: 200px;" onchange="loadExamLeaderboard()">
+        </div>
+        
+        <div style="display: flex; flex-direction: column; align-items: flex-start;">
+            <label style="color: #ccc; font-size: 12px; margin-bottom: 5px;">Select Subject</label>
+            <select id="examSubjectFilter" class="glass-input" style="width: 250px;" onchange="loadExamLeaderboard()">
+                <option value="">Select Subject...</option>
+                <option value="Physics">Physics</option>
+                <option value="Chemistry">Chemistry</option>
+                <option value="Mathematics">Mathematics</option>
+                <option value="Biology">Biology</option>
+                <option value="Full Syllabus (PCM)">Full Syllabus (PCM)</option>
+                <option value="Full Syllabus (PCB)">Full Syllabus (PCB)</option>
+            </select>
+        </div>
+    </div>
+
+    <div style="overflow-x: auto;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left;">
+            <thead style="border-bottom: 2px solid #ffcc00;">
+                <tr>
+                    <th style="padding: 15px;">Rank</th>
+                    <th style="padding: 15px;">Student Name</th>
+                    <th style="padding: 15px;">Reg No</th>
+                    <th style="padding: 15px;">Score</th>
+                </tr>
+            </thead>
+            <tbody id="examLeaderboardBody">
+                <tr><td colspan="4" style="text-align:center; padding: 20px; color: #aaa;">Select a date and subject to view results.</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
     <div class="glass-panel" style="max-width: 900px; margin: 0 auto;">
         <h2 style="color: #ffcc00; text-align: center; margin-bottom: 20px;">🏆 Weekly Global Leaderboard</h2>
         
@@ -71,50 +110,87 @@
     </div>
 
     <script>
-        async function loadStudentLeaderboard() {
-            const filter = document.getElementById('studentExamFilter').value;
-            try {
-                const response = await fetch(`http://localhost:5000/api/leaderboard?exam=${filter}`);
-                const data = await response.json();
-                const tbody = document.getElementById('studentLeaderboardBody');
-                
-                // --- ANIMATION TRIGGER START ---
-                // 1. Remove the class if it's already there
-                tbody.classList.remove('speed-animate');
-                // 2. Trigger a browser reflow (forces the browser to reset the animation)
-                void tbody.offsetWidth; 
-                // 3. Add the class back so it runs the animation
-                tbody.classList.add('speed-animate');
-                // --- ANIMATION TRIGGER END ---
 
-                tbody.innerHTML = '';
+        const API_URL = 'https://success-academy.onrender.com/api';
 
-                if(data.length === 0) {
-                    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 20px; color: #ccc;">Awaiting this week's test results...</td></tr>`;
-                    return;
-                }
+// 1. NEW: Load Results for a specific Exam (Date + Subject)
+async function loadExamLeaderboard() {
+    const date = document.getElementById('examDateFilter').value;
+    const subject = document.getElementById('examSubjectFilter').value;
+    const tbody = document.getElementById('examLeaderboardBody');
 
-                data.forEach((student, index) => {
-                    let rank = index + 1;
-                    if (index === 0) rank = '🥇 1st';
-                    if (index === 1) rank = '🥈 2nd';
-                    if (index === 2) rank = '🥉 3rd';
+    if (!date || !subject) return; // Wait until both are selected
 
-                    tbody.innerHTML += `
-                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
-                            <td style="padding: 15px; font-size: 20px;">${rank}</td>
-                            <td style="padding: 15px; font-weight: 600;">${student.name}</td>
-                            <td style="padding: 15px; color: #aaa;">${student.exam_type}</td>
-                            <td style="padding: 15px; color: #00ff88; font-weight: bold;">${student.score} PTS</td>
-                        </tr>
-                    `;
-                });
-            } catch (error) {
-                console.error("Failed to fetch leaderboard", error);
-                const tbody = document.getElementById('studentLeaderboardBody');
-                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 20px; color: #ff4d4d;">⚠️ Cannot connect to the server. Please try again later.</td></tr>`;
-            }
+    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 20px;">Loading results...</td></tr>`;
+
+    try {
+        const response = await fetch(`${API_URL}/leaderboard/exam?date=${date}&subject=${encodeURIComponent(subject)}`);
+        const data = await response.json();
+
+        tbody.innerHTML = '';
+        if (data.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 20px; color: #ccc;">No results found for this exam.</td></tr>`;
+            return;
         }
+
+        data.forEach((student, index) => {
+            const rankSuffix = getRankSuffix(student.rank);
+            tbody.innerHTML += `
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                    <td style="padding: 15px; font-size: 18px; color: #ffcc00; font-weight: bold;">${student.rank}${rankSuffix}</td>
+                    <td style="padding: 15px; font-weight: 600;">${student.name}</td>
+                    <td style="padding: 15px; color: #aaa;">${student.reg_no}</td>
+                    <td style="padding: 15px; color: #00ff88; font-weight: bold;">${student.marks_obtained} / ${student.total_marks}</td>
+                </tr>
+            `;
+        });
+    } catch (error) {
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 20px; color: #ff4d4d;">⚠️ Failed to load exam results.</td></tr>`;
+    }
+}
+
+// 2. Load the Weekly Global Leaderboard (Updated with correct URL)
+async function loadStudentLeaderboard() {
+    const filter = document.getElementById('studentExamFilter').value;
+    try {
+        const response = await fetch(`${API_URL}/leaderboard?exam=${filter}`);
+        const data = await response.json();
+        const tbody = document.getElementById('studentLeaderboardBody');
+        
+        tbody.innerHTML = '';
+        if(data.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding: 20px; color: #ccc;">Awaiting this week's test results...</td></tr>`;
+            return;
+        }
+
+        data.forEach((student, index) => {
+            let rank = index + 1;
+            if (index === 0) rank = '🥇 1st';
+            else if (index === 1) rank = '🥈 2nd';
+            else if (index === 2) rank = '🥉 3rd';
+
+            tbody.innerHTML += `
+                <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                    <td style="padding: 15px; font-size: 20px;">${rank}</td>
+                    <td style="padding: 15px; font-weight: 600;">${student.name}</td>
+                    <td style="padding: 15px; color: #aaa;">${student.exam_type}</td>
+                    <td style="padding: 15px; color: #00ff88; font-weight: bold;">${student.score} PTS</td>
+                </tr>
+            `;
+        });
+    } catch (error) {
+        console.error("Failed to fetch leaderboard", error);
+    }
+}
+
+// Helper for ranking
+function getRankSuffix(rank) {
+    const j = rank % 10, k = rank % 100;
+    if (j == 1 && k != 11) return "st";
+    if (j == 2 && k != 12) return "nd";
+    if (j == 3 && k != 13) return "rd";
+    return "th";
+}
         
         window.addEventListener("load", loadStudentLeaderboard);
 
