@@ -381,3 +381,69 @@ body{
   75% { opacity:1; } 
   100% { opacity:0; transform:translate(0px, -400px) scale(2) rotate(15deg); } 
 }
+/* =========================================================
+   MASTER MOBILE RESPONSIVENESS FIXES FOR NOTICE CARDS
+   ========================================================= */
+
+/* Prevent the body from showing a horizontal scrollbar if an emoji flies too far */
+body {
+  overflow-x: hidden;
+}
+
+@media(max-width: 768px) {
+  /* 1. Prevent the card from zooming too much and breaking screen width */
+  .note-card:hover,
+  .note-card:active {
+    transform: scale(1.02) rotate(0deg) !important;
+    box-shadow: 8px 12px 15px rgba(0,0,0,.5) !important;
+  }
+
+  /* 2. Shrink the flying particles slightly so they aren't overwhelming */
+  .card-particles span {
+    font-size: 20px !important;
+  }
+  .fee-card .card-particles span,
+  .remarks-card .card-particles span {
+    font-size: 28px !important;
+  }
+
+  /* 3. Trigger tighter mobile flight paths on tap/hover */
+  .note-card:hover .p1, .note-card:active .p1 { animation: mobileFly1 1.2s cubic-bezier(0.2, 0.9, 0.2, 1) forwards !important; }
+  .note-card:hover .p2, .note-card:active .p2 { animation: mobileFly2 1.2s cubic-bezier(0.2, 0.9, 0.2, 1) forwards !important; }
+  .note-card:hover .p3, .note-card:active .p3 { animation: mobileFly3 1.2s cubic-bezier(0.2, 0.9, 0.2, 1) forwards !important; }
+  .note-card:hover .p4, .note-card:active .p4 { animation: mobileFly4 1.2s cubic-bezier(0.2, 0.9, 0.2, 1) forwards !important; }
+  .note-card:hover .p5, .note-card:active .p5 { animation: mobileFly5 1.2s cubic-bezier(0.2, 0.9, 0.2, 1) forwards !important; }
+}
+
+/* --- TIGHTER MOBILE FLIGHT PATHS --- */
+/* These travel about half the distance of the desktop versions */
+@keyframes mobileFly1 { 
+  0% { opacity:0; transform:translate(0,0) scale(0.5); } 
+  15% { opacity:1; } 
+  75% { opacity:1; } 
+  100% { opacity:0; transform:translate(-90px, -120px) scale(1.2) rotate(-45deg); } 
+}
+@keyframes mobileFly2 { 
+  0% { opacity:0; transform:translate(0,0) scale(0.5); } 
+  15% { opacity:1; } 
+  75% { opacity:1; } 
+  100% { opacity:0; transform:translate(110px, -90px) scale(1.4) rotate(30deg); } 
+}
+@keyframes mobileFly3 { 
+  0% { opacity:0; transform:translate(0,0) scale(0.5); } 
+  15% { opacity:1; } 
+  75% { opacity:1; } 
+  100% { opacity:0; transform:translate(-70px, 130px) scale(1.2) rotate(-20deg); } 
+}
+@keyframes mobileFly4 { 
+  0% { opacity:0; transform:translate(0,0) scale(0.5); } 
+  15% { opacity:1; } 
+  75% { opacity:1; } 
+  100% { opacity:0; transform:translate(90px, 110px) scale(1.3) rotate(45deg); } 
+}
+@keyframes mobileFly5 { 
+  0% { opacity:0; transform:translate(0,0) scale(0.5); } 
+  15% { opacity:1; } 
+  75% { opacity:1; } 
+  100% { opacity:0; transform:translate(0px, -150px) scale(1.5) rotate(15deg); } 
+}
