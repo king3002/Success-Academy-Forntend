@@ -186,23 +186,23 @@ function populateDashboard(data) {
     }
 }
 async function loadDailyTimetable(standard, type) {
-    const today = new Date().toISOString().split('T')[0];
+    // FIX: Use 'en-CA' locale to get YYYY-MM-DD in your LOCAL time zone
+    const today = new Date().toLocaleDateString('en-CA'); 
     const container = document.getElementById("dailyScheduleContainer");
     
-    if (!container) return; // Safety check
+    if (!container) return;
 
     try {
         const response = await fetch(`https://success-academy.onrender.com/api/student/timetable?date=${today}&standard=${standard}&type=${type}`);
         const schedule = await response.json();
 
         container.innerHTML = "";
-        if (schedule.length === 0) {
+        if (!schedule || schedule.length === 0) {
             container.innerHTML = "<p style='color:#aaa; text-align: center; padding: 20px;'>No classes scheduled for today.</p>";
             return;
         }
 
         schedule.forEach(slot => {
-            // Reusing your sleek "reply-item" style for consistency
             container.innerHTML += `
                 <div class="reply-item" style="border-left: 4px solid #ffcc00; padding: 15px; margin-bottom: 10px;">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -219,7 +219,6 @@ async function loadDailyTimetable(standard, type) {
         });
     } catch (err) { 
         console.error("Timetable Load Error:", err); 
-        container.innerHTML = "<p style='color: #ff4d4d;'>Failed to load today's schedule.</p>";
     }
 }
 // ==========================================
