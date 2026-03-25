@@ -196,23 +196,26 @@ async function loadDailyTimetable(standard, type) {
         const response = await fetch(`https://success-academy.onrender.com/api/student/timetable?date=${today}&standard=${standard}&type=${type}`);
         const schedule = await response.json();
 
-        container.innerHTML = "";
+        // NEW: Clear the container and create the horizontal scrolling track wrapper
+        container.innerHTML = `<div class="daily-schedule-track" id="scheduleTrack"></div>`;
+        const track = document.getElementById("scheduleTrack");
+
         if (!schedule || schedule.length === 0) {
-            container.innerHTML = "<p style='color:#aaa; text-align: center; padding: 20px;'>No classes scheduled for today.</p>";
+            track.innerHTML = "<p style='color:#aaa; width: 100%; text-align: center; padding: 20px;'>No classes scheduled for today.</p>";
             return;
         }
 
         schedule.forEach(slot => {
-            container.innerHTML += `
-                <div class="reply-item" style="border-left: 4px solid #ffcc00; padding: 15px; margin-bottom: 10px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <div>
-                            <span style="color: #ffcc00; font-weight: bold; font-size: 18px;">${slot.subject}</span>
-                            <p style="margin: 0; font-size: 14px; color: #ccc;">${slot.topic || 'Regular Class'}</p>
-                        </div>
-                        <div style="text-align: right;">
-                            <span style="font-weight: 600; color: white;">${slot.start_time.slice(0,5)} - ${slot.end_time.slice(0,5)}</span>
-                        </div>
+            // Format time safely (e.g. 09:00 - 10:30)
+            const timeString = `${slot.start_time.slice(0,5)} - ${slot.end_time.slice(0,5)}`;
+            
+            // NEW: Inject the sleek Glassmorphic Class Cards
+            track.innerHTML += `
+                <div class="class-card">
+                    <div class="class-time-badge">🕒 ${timeString}</div>
+                    <div>
+                        <div class="class-subject">${slot.subject}</div>
+                        <div class="class-topic">${slot.topic || 'Regular Class'}</div>
                     </div>
                 </div>
             `;

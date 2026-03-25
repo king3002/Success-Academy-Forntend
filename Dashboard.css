@@ -837,3 +837,72 @@ select.admin-input option, select.glass-input option {
 
   
 }
+/* =========================================================
+   HORIZONTAL CLASS TRACK (TIMETABLE)
+   ========================================================= */
+.daily-schedule-track {
+    display: flex;
+    overflow-x: auto;
+    gap: 20px;
+    padding: 10px 5px 20px 5px; /* Padding for hover shadows */
+    
+    /* Sleek custom scrollbar */
+    scrollbar-width: thin;
+    scrollbar-color: #ffcc00 rgba(255, 255, 255, 0.05);
+}
+
+.daily-schedule-track::-webkit-scrollbar {
+    height: 8px;
+}
+.daily-schedule-track::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+}
+.daily-schedule-track::-webkit-scrollbar-thumb {
+    background: #ffcc00;
+    border-radius: 10px;
+}
+
+.class-card {
+    min-width: 240px; /* Forces cards to stay wide even on small screens */
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.01) 100%);
+    border: 1px solid rgba(255, 204, 0, 0.2);
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.class-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0, 255, 136, 0.15);
+    border-color: #00ff88;
+}
+
+.class-time-badge {
+    align-self: flex-start;
+    background: #ffcc00;
+    color: #000;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 10px rgba(255, 204, 0, 0.3);
+}
+
+.class-subject {
+    font-size: 22px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 5px;
+    letter-spacing: 0.5px;
+}
+
+.class-topic {
+    font-size: 14px;
+    color: #aaa;
+}
