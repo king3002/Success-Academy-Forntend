@@ -152,13 +152,17 @@ async function approveStudent(studentId, studentName, btnElement) {
 
 // ================= MANAGE STUDENTS LOGIC =================
 
+// UPDATE THIS EXISTING FUNCTION
 async function loadAllStudents() {
     try {
         const response = await fetch(`${API_BASE_URL}/admin/students`, {
             headers: { 'x-admin-key': ADMIN_KEY }
         });
         allStudentsDB = await response.json();
-        searchStudent(); // Render table
+        searchStudent(); 
+        
+        populateNoticeDropdown(); // <--- ADD THIS LINE
+        
     } catch (err) {
         console.error("Failed to load students", err);
     }
@@ -553,15 +557,25 @@ async function uploadExcelMarks(event) {
 }
 
 // ================= POST NOTICES LOGIC =================
+// REPLACE THIS EXISTING FUNCTION
 async function publishNotice(event) {
     event.preventDefault();
     
+    // Grab all selected options as an array
+    const selectElement = document.getElementById('noticeTarget');
+    const selectedOptions = Array.from(selectElement.selectedOptions).map(opt => opt.value);
+    
     const data = {
         noticeType: document.getElementById('noticeType').value,
-        targetRegNo: document.getElementById('noticeTarget').value,
+        targetRegNo: selectedOptions, // Sends the array to the backend
         title: document.getElementById('noticeTitle').value,
         content: document.getElementById('noticeContent').value
     };
+
+    const btn = event.target.querySelector('button[type="submit"]');
+    const originalText = btn.innerText;
+    btn.innerText = "Publishing...";
+    btn.disabled = true;
 
     try {
         const response = await fetch(`${API_BASE_URL}/admin/publish-notice`, {
@@ -575,12 +589,15 @@ async function publishNotice(event) {
         const result = await response.json();
         if(result.success) {
             alert("✅ Notice Published Successfully!");
-            event.target.reset();
+            event.target.reset(); // Clears inputs and unselects everything
         } else {
             alert("Error: " + result.error);
         }
     } catch(err) {
         alert("Failed to publish notice.");
+    } finally {
+        btn.innerText = originalText;
+        btn.disabled = false;
     }
 }
 
@@ -781,6 +798,38 @@ async function submitCustomReply() {
         btn.disabled = false;
     }
 }
+// ==========================================
+// NOTICE DROPDOWN LOGIC (MULTI-SELECT)
+// ==========================================
+
+function populateNoticeDropdown() {
+    const select = document.getElementById('noticeTarget');
+    select.innerHTML = ""; // Clear existing
+
+    // Filter out Graduated students and sort by Reg No
+    const activeStudents = allStudentsDB.filter(student => student.status !== 'Graduated');
+    activeStudents.sort((a, b) => a.reg_no.localeCompare(b.reg_no));
+
+    activeStudents.forEach(student => {
+        const option = document.createElement('option');
+        option.value = student.reg_no;
+        option.textContent = `${student.reg_no} - ${student.name}`; 
+        select.appendChild(option);
+    });
+}
+
+// Intercept clicks so you don't have to hold Ctrl/Cmd
+document.getElementById('noticeTarget').addEventListener('mousedown', function(e) {
+    if(e.target.tagName === 'OPTION') {
+        e.preventDefault(); // Stop default browser unselect behavior
+        const originalScrollTop = this.scrollTop; 
+        
+        e.target.selected = !e.target.selected; // Toggle selection
+        
+        setTimeout(() => { this.scrollTop = originalScrollTop; }, 0);
+        this.focus(); 
+    }
+});
 
 // ================= YEAR-END PROMOTION LOGIC =================
 async function executeBulkPromotion() {

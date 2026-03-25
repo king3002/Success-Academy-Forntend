@@ -315,8 +315,9 @@
               <option value="Remarks">Personal Remarks</option>
             </select>
 
-            <label>Target Student Reg No (Leave blank for all students)</label>
-            <input type="text" id="noticeTarget" class="admin-input" placeholder="e.g., SA2024001">
+            <label>Target Student Reg No (Click to select multiple. Leave unselected for all)</label>
+<select id="noticeTarget" class="admin-input" multiple style="height: 120px; padding: 5px;">
+  </select>
 
             <label>Notice Title</label>
             <input type="text" id="noticeTitle" class="admin-input" placeholder="e.g., Installment Due Reminder" required>
