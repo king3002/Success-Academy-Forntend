@@ -799,37 +799,104 @@ async function submitCustomReply() {
     }
 }
 // ==========================================
-// NOTICE DROPDOWN LOGIC (MULTI-SELECT)
+// CUSTOM MULTI-SELECT DROPDOWN & PUBLISH NOTICE LOGIC
 // ==========================================
 
+// 1. Opens and closes the dropdown list
+function toggleMultiSelect() {
+    document.getElementById('multiSelectDropdown').classList.toggle('show');
+}
+
+// 2. Closes the dropdown if you click anywhere else on the screen
+window.addEventListener('click', function(e) {
+    const selectContainer = document.querySelector('.custom-multi-select');
+    if (selectContainer && !selectContainer.contains(e.target)) {
+        document.getElementById('multiSelectDropdown').classList.remove('show');
+    }
+});
+
+// 3. Fills the dropdown with student checkboxes
 function populateNoticeDropdown() {
-    const select = document.getElementById('noticeTarget');
-    select.innerHTML = ""; // Clear existing
+    const dropdown = document.getElementById('multiSelectDropdown');
+    dropdown.innerHTML = ""; // Clear existing
 
     // Filter out Graduated students and sort by Reg No
     const activeStudents = allStudentsDB.filter(student => student.status !== 'Graduated');
     activeStudents.sort((a, b) => a.reg_no.localeCompare(b.reg_no));
 
     activeStudents.forEach(student => {
-        const option = document.createElement('option');
-        option.value = student.reg_no;
-        option.textContent = `${student.reg_no} - ${student.name}`; 
-        select.appendChild(option);
+        const label = document.createElement('label');
+        label.innerHTML = `<input type="checkbox" value="${student.reg_no}" class="notice-student-cb"> ${student.reg_no} - ${student.name}`;
+        
+        // Listen for clicks to update the text
+        label.querySelector('input').addEventListener('change', updateMultiSelectText);
+        
+        dropdown.appendChild(label);
     });
 }
 
-// Intercept clicks so you don't have to hold Ctrl/Cmd
-document.getElementById('noticeTarget').addEventListener('mousedown', function(e) {
-    if(e.target.tagName === 'OPTION') {
-        e.preventDefault(); // Stop default browser unselect behavior
-        const originalScrollTop = this.scrollTop; 
-        
-        e.target.selected = !e.target.selected; // Toggle selection
-        
-        setTimeout(() => { this.scrollTop = originalScrollTop; }, 0);
-        this.focus(); 
+// 4. Updates the text on the dropdown button
+function updateMultiSelectText() {
+    const checkedBoxes = document.querySelectorAll('.notice-student-cb:checked');
+    const textSpan = document.getElementById('multiSelectText');
+    
+    if (checkedBoxes.length === 0) {
+        textSpan.innerText = "Select Students...";
+    } else if (checkedBoxes.length === 1) {
+        textSpan.innerText = "1 Student Selected";
+    } else {
+        textSpan.innerText = `${checkedBoxes.length} Students Selected`;
     }
-});
+}
+
+// 5. Publish Notice Submission Logic
+async function publishNotice(event) {
+    event.preventDefault();
+    
+    // Grab all checked boxes
+    const checkedBoxes = document.querySelectorAll('.notice-student-cb:checked');
+    const selectedOptions = Array.from(checkedBoxes).map(cb => cb.value);
+    
+    const data = {
+        noticeType: document.getElementById('noticeType').value,
+        targetRegNo: selectedOptions, // Sends the array to backend
+        title: document.getElementById('noticeTitle').value,
+        content: document.getElementById('noticeContent').value
+    };
+
+    const btn = event.target.querySelector('button[type="submit"]');
+    const originalText = btn.innerText;
+    btn.innerText = "Publishing...";
+    btn.disabled = true;
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/admin/publish-notice`, {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'x-admin-key': ADMIN_KEY
+            },
+            body: JSON.stringify(data)
+        });
+        const result = await response.json();
+        
+        if(result.success) {
+            alert("✅ Notice Published Successfully!");
+            event.target.reset(); // Clears text inputs
+            
+            // Reset the custom dropdown UI
+            document.querySelectorAll('.notice-student-cb').forEach(cb => cb.checked = false);
+            document.getElementById('multiSelectText').innerText = "Select Students...";
+        } else {
+            alert("Error: " + result.error);
+        }
+    } catch(err) {
+        alert("Failed to publish notice.");
+    } finally {
+        btn.innerText = originalText;
+        btn.disabled = false;
+    }
+}
 
 // ================= YEAR-END PROMOTION LOGIC =================
 async function executeBulkPromotion() {

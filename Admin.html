@@ -315,9 +315,15 @@
               <option value="Remarks">Personal Remarks</option>
             </select>
 
-            <label>Target Student Reg No (Click to select multiple. Leave unselected for all)</label>
-<select id="noticeTarget" class="admin-input" multiple style="height: 120px; padding: 5px;">
-  </select>
+            <label>Target Student Reg No (Select specific students or leave blank for all)</label>
+
+<div class="custom-multi-select">
+  <div class="select-box admin-input" id="multiSelectBox" onclick="toggleMultiSelect()">
+    <span id="multiSelectText">Select Students...</span>
+  </div>
+  <div class="select-dropdown" id="multiSelectDropdown">
+    </div>
+</div>
 
             <label>Notice Title</label>
             <input type="text" id="noticeTitle" class="admin-input" placeholder="e.g., Installment Due Reminder" required>

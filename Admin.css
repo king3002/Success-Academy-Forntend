@@ -316,3 +316,79 @@ select.admin-input option, select.glass-input option {
     padding: 12px;
     font-size: 14px;
 }
+/* ================= CUSTOM MULTI-SELECT DROPDOWN ================= */
+.custom-multi-select {
+    position: relative;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+/* The closed dropdown button */
+.custom-multi-select .select-box {
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0; 
+    /* Uses your existing custom white arrow */
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="white" viewBox="0 0 16 16"><path d="M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 12px;
+    padding-right: 40px;
+}
+
+/* The floating list of checkboxes */
+.custom-multi-select .select-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    max-height: 250px;
+    overflow-y: auto;
+    background: #1e1e2f;
+    border: 1px solid rgba(255, 204, 0, 0.4);
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+    z-index: 100;
+    display: none; /* Hidden until clicked */
+    flex-direction: column;
+    margin-top: 5px;
+}
+
+/* Toggled via JS to show the list */
+.custom-multi-select .select-dropdown.show {
+    display: flex;
+}
+
+/* Individual checkbox rows */
+.select-dropdown label {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    margin: 0;
+    cursor: pointer;
+    transition: 0.2s;
+    color: white;
+    font-size: 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.select-dropdown label:hover {
+    background: rgba(255, 204, 0, 0.1);
+    color: #ffcc00;
+}
+
+/* Make the checkbox box yellow */
+.select-dropdown input[type="checkbox"] {
+    margin-right: 12px;
+    accent-color: #ffcc00; 
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+/* Sleek Scrollbar for the dropdown */
+.select-dropdown::-webkit-scrollbar { width: 6px; }
+.select-dropdown::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 8px;}
+.select-dropdown::-webkit-scrollbar-thumb { background: #ffcc00; border-radius: 8px;}
