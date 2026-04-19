@@ -118,6 +118,7 @@ document.getElementById("openUnlockModal")?.addEventListener("click", () => {
 });
 document.getElementById("openRegisterModal")?.addEventListener("click", () => modals.register.style.display = "flex");
 document.getElementById("openLoginModal")?.addEventListener("click", () => modals.login.style.display = "flex");
+document.getElementById("openLoginModal2")?.addEventListener("click", () => modals.login.style.display = "flex");
 document.getElementById("openLoginOnly")?.addEventListener("click", () => modals.login.style.display = "flex");
 document.getElementById("openApplyModal")?.addEventListener("click", () => modals.apply.style.display = "flex");
 
@@ -249,7 +250,7 @@ document.getElementById("adminLoginForm")?.addEventListener("submit", async func
     const response = await fetch('https://success-academy.onrender.com/api/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ reg_no: regNo, password: password })
+      body: JSON.stringify({ reg_no: regNo, password: password, device_id: getDeviceId() })
     });
 
     const data = await response.json();
@@ -368,6 +369,18 @@ document.getElementById("verifyOtpBtn")?.addEventListener("click", async () => {
 });
 
 // ==========================================
+// DEVICE FINGERPRINT HELPER
+// ==========================================
+function getDeviceId() {
+  let id = localStorage.getItem("deviceId");
+  if (!id) {
+    id = 'dev-' + Math.random().toString(36).substring(2) + Date.now().toString(36);
+    localStorage.setItem("deviceId", id);
+  }
+  return id;
+}
+
+// ==========================================
 // 4. LOGIN LOGIC (Backend Connected)
 // ==========================================
 document.getElementById("loginForm")?.addEventListener("submit", async function(e) {
@@ -385,7 +398,7 @@ document.getElementById("loginForm")?.addEventListener("submit", async function(
     const response = await fetch('https://success-academy.onrender.com/api/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ reg_no: regNo, password: password })
+      body: JSON.stringify({ reg_no: regNo, password: password, device_id: getDeviceId() })
     });
 
     const data = await response.json();
